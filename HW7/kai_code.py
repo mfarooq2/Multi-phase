@@ -187,129 +187,129 @@ L_sq_r=L_sq[1]/L_sq[0]
 for i in range(1, Nx2+1):
     ref_S_u[i]=ref_vel_prof(cell_S_x_coor_y[0,i])
 #while L_sq[1]>=1e-5: 
-while n_iter<=13000:
+while n_iter<=20: #13000
     L_sq[0]=L_sq[1] #predictor step:
     for j in range(1, Nx2+1):
         for i in range(1, Nx1+1):
             #cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*(-Adv_x_n(i,j)+nu*Dif_x_n(i,j))
             cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*(nu*Dif_x_n(i,j)-gradP/rho) 
             epstot=100.0
-while epstot>1e-4: 
-    epstot=0.0
-for j in range(2, Nx2): 
-    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,j]-cell_S_x_unn[1,j]+cell_S_y_vs[1,j+1]-cell_S_y_vs[1,j]) 
-    cell_cent_pnn[1,j]=(cell_vol*U_s-(cell_cent_pn[2,j]+cell_cent_pn[1,j+1]+cell_cent_pn[1,j-1]))/(-3) 
-    epstot+=(cell_cent_pnn[1,j]-cell_cent_pn[1,j])**2
-    cell_cent_pn[1,j]=cell_cent_pnn[1,j]
-for i in range(2, Nx1):
-    for j in range(1,Nx2+1):
-        U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[i+1,j]- cell_S_x_us[i,j]+cell_S_y_vs[i,j+1]-cell_S_y_vs[i,j])
-        cell_cent_pnn[i,j]=(cell_vol*U_s-(cell_cent_pn[i+1,j]+cell_cent_pn[i- 1,j]+cell_cent_pn[i,j+1]+cell_cent_pn[i,j-1]))/(-4)
-#print('{:4.4e}, {:4.4e}'.format(cell_cent_pnn[i,j], cell_cent_pn[i,j])) epstot+=(cell_cent_pnn[i,j]-cell_cent_pn[i,j])**2 cell_cent_pn[i,j]=cell_cent_pnn[i,j]
-for j in range(2, Nx2): 
-    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-1,j]-cell_S_x_us[-2,j]+cell_S_y_vs[-2,j+1]-cell_S_y_vs[-2,j]) 
-    cell_cent_pnn[-2,j]=(cell_vol*U_s-(cell_cent_pn[-3,j]+cell_cent_pn[-2,j+1]+cell_cent_pn[-2,j-1]))/(-3) 
-    epstot+=(cell_cent_pnn[-2,j]-cell_cent_pn[-2,j])**2
-    cell_cent_pn[-2,j]=cell_cent_pnn[-2,j] 
-#coroner update
-U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,1]-cell_S_x_unn[1,1]+cell_S_y_vs[1,2]- cell_S_y_vnn[1,1])
-cell_cent_pnn[1,1]=(cell_vol*U_s-(cell_cent_pn[2,1]+cell_cent_pn[1,2]))/(-2) 
-epstot+=(cell_cent_pnn[1,1]-cell_cent_pn[1,1])**2 
-cell_cent_pn[1,1]=cell_cent_pnn[1,1]
-U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,-2]-cell_S_x_unn[1,-2]+cell_S_y_vnn[1,- 2]-cell_S_y_vnn[1,-3])
-cell_cent_pnn[1,-2]=(cell_vol*U_s-(cell_cent_pn[2,-2]+cell_cent_pn[1,-3]))/(-2)
+    while epstot>1e-4: 
+        epstot=0.0
+    for j in range(2, Nx2): 
+        U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,j]-cell_S_x_unn[1,j]+cell_S_y_vs[1,j+1]-cell_S_y_vs[1,j]) 
+        cell_cent_pnn[1,j]=(cell_vol*U_s-(cell_cent_pn[2,j]+cell_cent_pn[1,j+1]+cell_cent_pn[1,j-1]))/(-3) 
+        epstot+=(cell_cent_pnn[1,j]-cell_cent_pn[1,j])**2
+        cell_cent_pn[1,j]=cell_cent_pnn[1,j]
+    for i in range(2, Nx1):
+        for j in range(1,Nx2+1):
+            U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[i+1,j]- cell_S_x_us[i,j]+cell_S_y_vs[i,j+1]-cell_S_y_vs[i,j])
+            cell_cent_pnn[i,j]=(cell_vol*U_s-(cell_cent_pn[i+1,j]+cell_cent_pn[i- 1,j]+cell_cent_pn[i,j+1]+cell_cent_pn[i,j-1]))/(-4)
+    #print('{:4.4e}, {:4.4e}'.format(cell_cent_pnn[i,j], cell_cent_pn[i,j])) epstot+=(cell_cent_pnn[i,j]-cell_cent_pn[i,j])**2 cell_cent_pn[i,j]=cell_cent_pnn[i,j]
+    for j in range(2, Nx2): 
+        U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-1,j]-cell_S_x_us[-2,j]+cell_S_y_vs[-2,j+1]-cell_S_y_vs[-2,j]) 
+        cell_cent_pnn[-2,j]=(cell_vol*U_s-(cell_cent_pn[-3,j]+cell_cent_pn[-2,j+1]+cell_cent_pn[-2,j-1]))/(-3) 
+        epstot+=(cell_cent_pnn[-2,j]-cell_cent_pn[-2,j])**2
+        cell_cent_pn[-2,j]=cell_cent_pnn[-2,j] 
+    #coroner update
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,1]-cell_S_x_unn[1,1]+cell_S_y_vs[1,2]- cell_S_y_vnn[1,1])
+    cell_cent_pnn[1,1]=(cell_vol*U_s-(cell_cent_pn[2,1]+cell_cent_pn[1,2]))/(-2) 
+    epstot+=(cell_cent_pnn[1,1]-cell_cent_pn[1,1])**2 
+    cell_cent_pn[1,1]=cell_cent_pnn[1,1]
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,-2]-cell_S_x_unn[1,-2]+cell_S_y_vnn[1,- 2]-cell_S_y_vnn[1,-3])
+    cell_cent_pnn[1,-2]=(cell_vol*U_s-(cell_cent_pn[2,-2]+cell_cent_pn[1,-3]))/(-2)
 
-epstot+=(cell_cent_pnn[1,-2]-cell_cent_pn[1,-2])**2
-cell_cent_pn[1,-2]=cell_cent_pnn[1,-2]
-U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-2+1,1]-cell_S_x_us[-2,1]+cell_S_y_vs[- 2,2]-cell_S_y_vnn[-2,1])
-cell_cent_pnn[-2,1]=(cell_vol*U_s-(cell_cent_pn[-2-1,1]+cell_cent_pn[-2,2]))/(-2) 
-epstot+=(cell_cent_pnn[-2,1]-cell_cent_pn[-2,1])**2
-cell_cent_pn[-2,1]=cell_cent_pnn[-2,1]
-U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-2+1,-2]-cell_S_x_us[-2,- 2]+cell_S_y_vnn[-2,-2+1]-cell_S_y_vs[-2,-2])
-cell_cent_pnn[-2,-2]=(cell_vol*U_s-(cell_cent_pn[-2-1,-2]+cell_cent_pn[-2,-2- 1]))/(-2)
-epstot+=(cell_cent_pnn[-2,-2]-cell_cent_pn[-2,-2])**2 
-cell_cent_pn[-2,-2]=cell_cent_pnn[-2,-2]
-for j in range(0, Nx2+2): 
-    cell_cent_pn[0,j]=cell_cent_pn[-2,j]
-    cell_cent_pn[-1,j]=cell_cent_pn[1,j]
-    for i in range(0, Nx1+2): 
-        cell_cent_pn[i,0]=cell_cent_pn[i,1] 
-        cell_cent_pn[i,-1]=cell_cent_pn[i,-2]
-        if p_iter%500==0:
-            plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1],cell_cent_pnn[1:Nx1+1, 1:Nx2+1], 20, cmap='jet') 
-            plt.colorbar()
-            plt.xlabel('$x_1$ (m)')
-            plt.ylabel('$x_2$ (m)')
-            plt.title('domain $p^{n+1}$ contour ($Pa$)') 
-            plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_p_contour.png') 
-            plt.gca().set_aspect('equal')
-            plt.show()
-            print('eps_tot= {:5.4e}'.format(epstot))
-            p_iter+=1
-#print('eps_tot= {:5.4e}'.format(epstot)) 
-# #corrector step:
-for j in range(1, Nx2+1):
-    for i in range(1, Nx1+1): 
-        cell_S_x_unn[i,j]=cell_S_x_us[i,j]-(1/rho)*(dt)*(cell_cent_pnn[i,j]-cell_cent_pnn[i-1,j])
+    epstot+=(cell_cent_pnn[1,-2]-cell_cent_pn[1,-2])**2
+    cell_cent_pn[1,-2]=cell_cent_pnn[1,-2]
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-2+1,1]-cell_S_x_us[-2,1]+cell_S_y_vs[- 2,2]-cell_S_y_vnn[-2,1])
+    cell_cent_pnn[-2,1]=(cell_vol*U_s-(cell_cent_pn[-2-1,1]+cell_cent_pn[-2,2]))/(-2) 
+    epstot+=(cell_cent_pnn[-2,1]-cell_cent_pn[-2,1])**2
+    cell_cent_pn[-2,1]=cell_cent_pnn[-2,1]
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-2+1,-2]-cell_S_x_us[-2,- 2]+cell_S_y_vnn[-2,-2+1]-cell_S_y_vs[-2,-2])
+    cell_cent_pnn[-2,-2]=(cell_vol*U_s-(cell_cent_pn[-2-1,-2]+cell_cent_pn[-2,-2- 1]))/(-2)
+    epstot+=(cell_cent_pnn[-2,-2]-cell_cent_pn[-2,-2])**2 
+    cell_cent_pn[-2,-2]=cell_cent_pnn[-2,-2]
+    for j in range(0, Nx2+2): 
+        cell_cent_pn[0,j]=cell_cent_pn[-2,j]
+        cell_cent_pn[-1,j]=cell_cent_pn[1,j]
+        for i in range(0, Nx1+2): 
+            cell_cent_pn[i,0]=cell_cent_pn[i,1] 
+            cell_cent_pn[i,-1]=cell_cent_pn[i,-2]
+            if p_iter%500==0:
+                plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1],cell_cent_pnn[1:Nx1+1, 1:Nx2+1], 20, cmap='jet') 
+                plt.colorbar()
+                plt.xlabel('$x_1$ (m)')
+                plt.ylabel('$x_2$ (m)')
+                plt.title('domain $p^{n+1}$ contour ($Pa$)') 
+                plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_p_contour.png') 
+                plt.gca().set_aspect('equal')
+                plt.show()
+                print('eps_tot= {:5.4e}'.format(epstot))
+                p_iter+=1
+    #print('eps_tot= {:5.4e}'.format(epstot)) 
+    # #corrector step:
+    for j in range(1, Nx2+1):
+        for i in range(1, Nx1+1): 
+            cell_S_x_unn[i,j]=cell_S_x_us[i,j]-(1/rho)*(dt)*(cell_cent_pnn[i,j]-cell_cent_pnn[i-1,j])
 
-#B.C. update
-for j in range(0, Nx2+2):
-    cell_S_x_unn[0,j]=cell_S_x_unn[-2,j]
-    cell_S_x_unn[-1,j]=cell_S_x_unn[1,j] 
-    for i in range(0, Nx1+2):
-        cell_S_x_unn[i,0]=cell_S_x_unn[i,1] 
-        cell_S_x_unn[i,-1]=cell_S_x_unn[i,-2]
-for j in range(1, Nx2+1):
-    for i in range(1, Nx1+1):
-        cell_cent_phis[i,j]=cell_cent_phin[i,j]+dt*L_phi_n(i, j) 
-        cell_cent_phinn[i,j]=cell_cent_phin[i,j]+0.5*dt*(L_phi_n(i,j)+L_phi_s(i,j)) 
-        cell_cent_phin[i,j]=cell_cent_phinn[i,j]
-        cell_S_x_un[i,j]=cell_S_x_unn[i,j]
-for j in range(0, Nx2+2): 
-    cell_S_x_un[0,j]=cell_S_x_un[-2,j] 
-    cell_S_x_un[-1,j]=cell_S_x_un[1,j]
-    cell_cent_phin[0,j]=cell_cent_phin[-2,j]
-    cell_cent_phin[-1,j]=cell_cent_phin[1,j] 
-    for i in range(0, Nx1+2):
-        cell_S_x_un[i,0]=-cell_S_x_un[i,1] 
-        cell_S_x_un[i,-1]=-cell_S_x_un[i,-2]
-        cell_cent_phin[i,0]=-cell_cent_phin[i,1] 
-        cell_cent_phin[i,-1]=-cell_cent_phin[i,-2]
-sq_sum_error=0
-for i in range(1,Nx2+1): 
-    sq_sum_error+=(ref_S_u[i]-cell_S_x_un[int(0.5*Nx1),i])**2
-    L_sq[1]=math.sqrt(sq_sum_error/(Nx2+1)) 
+    #B.C. update
+    for j in range(0, Nx2+2):
+        cell_S_x_unn[0,j]=cell_S_x_unn[-2,j]
+        cell_S_x_unn[-1,j]=cell_S_x_unn[1,j] 
+        for i in range(0, Nx1+2):
+            cell_S_x_unn[i,0]=cell_S_x_unn[i,1] 
+            cell_S_x_unn[i,-1]=cell_S_x_unn[i,-2]
+    for j in range(1, Nx2+1):
+        for i in range(1, Nx1+1):
+            cell_cent_phis[i,j]=cell_cent_phin[i,j]+dt*L_phi_n(i, j) 
+            cell_cent_phinn[i,j]=cell_cent_phin[i,j]+0.5*dt*(L_phi_n(i,j)+L_phi_s(i,j)) 
+            cell_cent_phin[i,j]=cell_cent_phinn[i,j]
+            cell_S_x_un[i,j]=cell_S_x_unn[i,j]
+    for j in range(0, Nx2+2): 
+        cell_S_x_un[0,j]=cell_S_x_un[-2,j] 
+        cell_S_x_un[-1,j]=cell_S_x_un[1,j]
+        cell_cent_phin[0,j]=cell_cent_phin[-2,j]
+        cell_cent_phin[-1,j]=cell_cent_phin[1,j] 
+        for i in range(0, Nx1+2):
+            cell_S_x_un[i,0]=-cell_S_x_un[i,1] 
+            cell_S_x_un[i,-1]=-cell_S_x_un[i,-2]
+            cell_cent_phin[i,0]=-cell_cent_phin[i,1] 
+            cell_cent_phin[i,-1]=-cell_cent_phin[i,-2]
+    sq_sum_error=0
+    for i in range(1,Nx2+1): 
+        sq_sum_error+=(ref_S_u[i]-cell_S_x_un[int(0.5*Nx1),i])**2
+        L_sq[1]=math.sqrt(sq_sum_error/(Nx2+1)) 
     if n_iter%500==0:
         print('iter= '+str(n_iter)+', L_sq= {:.4e}'.format(L_sq[0]))
-plt.plot(cell_S_x_un[int(0.5*Nx1),1:Nx2+1],cell_S_x_coor_y[int(0.5*Nx1),1:Nx2+1], color='navy', label='numerical sol, $L^2$= {:10.4e}'.format(L_sq[0]))
-plt.plot(ref_S_u[1:Nx2+1] ,cell_S_x_coor_y[int(0.5*Nx1),1:Nx2+1], color='red', label='reference')
-plt.xlabel('$u_1$ ($m/s$)')
-plt.ylabel('$x_2$ (m)')
-plt.legend()
-plt.grid()
-plt.gca().set_aspect('equal') 
-plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_v_profile.png') 
-plt.show()
-plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_S_x_un[1:Nx1+1, 1:Nx2+1], 20, cmap='inferno')
-plt.colorbar()
-plt.xlabel('$x_1$ (m)')
-plt.ylabel('$x_2$ (m)')
-plt.title('domain $u_1$ contour ($m/s$)') 
-plt.gca().set_aspect('equal') 
-plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_v_contour.png') 
-plt.show()
-plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_phin[1:Nx1+1, 1:Nx2+1], 20, cmap='coolwarm')
-plt.colorbar()
-plt.xlabel('$x_1$ (m)')
-plt.ylabel('$x_2$ (m)')
-plt.title('domain level-set') 
-plt.gca().set_aspect('equal')
-plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_ls.png') 
-plt.show()
-print('{:10d}, {:5.7e}'.format(n_iter, L_sq[1]))
-L_sq_r=L_sq[1]/L_sq[0]
-n_iter+=1
-print('iter= '+str(n_iter)+', L_sq= {:.4e}'.format(L_sq[0])) 
+        plt.plot(cell_S_x_un[int(0.5*Nx1),1:Nx2+1],cell_S_x_coor_y[int(0.5*Nx1),1:Nx2+1], color='navy', label='numerical sol, $L^2$= {:10.4e}'.format(L_sq[0]))
+        plt.plot(ref_S_u[1:Nx2+1] ,cell_S_x_coor_y[int(0.5*Nx1),1:Nx2+1], color='red', label='reference')
+        plt.xlabel('$u_1$ ($m/s$)')
+        plt.ylabel('$x_2$ (m)')
+        plt.legend()
+        plt.grid()
+        plt.gca().set_aspect('equal') 
+        plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_v_profile.png') 
+        plt.show()
+        plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_S_x_un[1:Nx1+1, 1:Nx2+1], 20, cmap='inferno')
+        plt.colorbar()
+        plt.xlabel('$x_1$ (m)')
+        plt.ylabel('$x_2$ (m)')
+        plt.title('domain $u_1$ contour ($m/s$)') 
+        plt.gca().set_aspect('equal') 
+        plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_v_contour.png') 
+        plt.show()
+        plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_phin[1:Nx1+1, 1:Nx2+1], 20, cmap='coolwarm')
+        plt.colorbar()
+        plt.xlabel('$x_1$ (m)')
+        plt.ylabel('$x_2$ (m)')
+        plt.title('domain level-set') 
+        plt.gca().set_aspect('equal')
+        plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_ls.png') 
+        plt.show()
+        print('{:10d}, {:5.7e}'.format(n_iter, L_sq[1]))
+    L_sq_r=L_sq[1]/L_sq[0]
+    n_iter+=1
+    print('iter= '+str(n_iter)+', L_sq= {:.4e}'.format(L_sq[0])) 
 plt.plot(cell_S_x_un[int(0.5*Nx1),1:Nx2+1],cell_S_x_coor_y[int(0.5*Nx1),1:Nx2+1], color='navy', label='numerical sol, $L^2$= {:10.4e}'.format(L_sq[0])) 
 plt.plot(ref_S_u[1:Nx2+1] ,cell_S_x_coor_y[int(0.5*Nx1),1:Nx2+1], color='red', label='reference')
 plt.xlabel('$u_1$ ($m/s$)')
