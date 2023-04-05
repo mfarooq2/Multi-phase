@@ -1,0 +1,14 @@
+{
+    "cSpell.words": [
+        "cmap",
+        "colorbar",
+        "contourf",
+        "coor",
+        "matplotlib",
+        "pyplot",
+        "xlabel",
+        "ylabel"
+    ],
+    "wolf.disableHotModeWarning": true,
+    "python.analysis.typeCheckingMode": "basic"
+}
