@@ -2,6 +2,7 @@ import numpy as np
 import math
 import matplotlib
 import matplotlib.pyplot as plt
+from pyparsing import Any
 #problem constants 
 nu=1e-6
 mu=1e-3
@@ -50,7 +51,7 @@ def D_y_m_s(i,j):
     return cell_cent_phis[i,j]-cell_cent_phis[i-1,j]
 def L_phi_n(i,j):
     
-    def phi_xh_n(i,j):
+    def phi_xh_n(i,j)-> (Any | None):
         if 0.5*(cell_S_x_unn[i+1,j]+cell_S_x_unn[i,j])>0:
             return cell_cent_phin[i,j]+0.5*min(D_x_p_n(i,j), D_x_m_n(i,j))
         elif 0.5*(cell_S_x_unn[i+1,j]+cell_S_x_unn[i,j])<0:
