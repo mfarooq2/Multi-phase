@@ -30,9 +30,14 @@ def p_looper( cell_S_x_us, cell_S_y_vs,cell_S_x_unn,cell_S_y_vnn, cell_cent_pn, 
     dt=var_dict['dt']
     cell_vol=var_dict['cell_vol']
     
-    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,2:Nx2]-cell_S_x_unn[1,2:Nx2]+cell_S_y_vs[1,2+1:Nx2+1]-cell_S_y_vs[1,2:Nx2])
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,2:Nx2]-cell_S_x_us[1,2:Nx2]+cell_S_y_vs[1,2+1:Nx2+1]-cell_S_y_vs[1,2:Nx2])
     cell_cent_pnn[1,2:Nx2]=(cell_vol*U_s-(cell_cent_pn[2,2:Nx2]+cell_cent_pn[1,2+1:Nx2+1]+cell_cent_pn[1,2-1:Nx2-1]))/(-3)
     cell_cent_pn[1,2:Nx2]=cell_cent_pnn[1,2:Nx2]
+    
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[-1,2:Nx2]-cell_S_x_us[-2,2:Nx2]+cell_S_y_vs[-2,2+1:Nx2+1]-cell_S_y_vs[-2,2:Nx2])
+    cell_cent_pnn[-2,2:Nx2]=(cell_vol*U_s-(cell_cent_pn[-3,2:Nx2]+cell_cent_pn[-2,2+1:Nx2+1]+cell_cent_pn[-2,2-1:Nx2-1]))/(-3)
+    cell_cent_pn[-2,2:Nx2]=cell_cent_pnn[-2,2:Nx2]
+    
 
     U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2+1:Nx1+1,1:Nx2+1]-cell_S_x_us[2:Nx1,1:Nx2+1]+cell_S_y_vs[2:Nx1,1+1:Nx2+1+1]-cell_S_y_vs[2:Nx1,1:Nx2+1])
     cell_cent_pnn[2:Nx1, 1 : Nx2 + 1] = (
@@ -46,19 +51,19 @@ def p_looper( cell_S_x_us, cell_S_y_vs,cell_S_x_unn,cell_S_y_vnn, cell_cent_pn, 
     ) / -4
     cell_cent_pn[2:Nx1,1:Nx2+1]=cell_cent_pnn[2:Nx1,1:Nx2+1]
 
-    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,1]-cell_S_x_unn[1,1]+cell_S_y_vs[1,2]-cell_S_y_vnn[1,1])
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,1]-cell_S_x_us[1,1]+cell_S_y_vs[1,2]-cell_S_y_vnn[1,1])
     cell_cent_pnn[1,1]=(cell_vol*U_s-(cell_cent_pn[2,1]+cell_cent_pn[1,2]))/(-2)
     cell_cent_pn[1,1]=cell_cent_pnn[1,1]
 
-    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-2+1,1]-cell_S_x_us[-2,1]+cell_S_y_vs[-2,2]-cell_S_y_vnn[-2,1])
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[-2+1,1]-cell_S_x_us[-2,1]+cell_S_y_vs[-2,2]-cell_S_y_vnn[-2,1])
     cell_cent_pnn[-2,1]=(cell_vol*U_s-(cell_cent_pn[-2-1,1]+cell_cent_pn[-2,2]))/(-2)
     cell_cent_pn[-2,1]=cell_cent_pnn[-2,1]
 
-    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,-2]-cell_S_x_unn[1,-2]+cell_S_y_vnn[1,-2]-cell_S_y_vnn[1,-3])
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,-2]-cell_S_x_us[1,-2]+cell_S_y_vnn[1,-2]-cell_S_y_vnn[1,-3])
     cell_cent_pnn[1,-2]=(cell_vol*U_s-(cell_cent_pn[2,-2]+cell_cent_pn[1,-3]))/(-2)
     cell_cent_pn[1,-2]=cell_cent_pnn[1,-2]
 
-    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-2+1,-2]-cell_S_x_us[-2,-2]+cell_S_y_vnn[-2,-2+1]-cell_S_y_vs[-2,-2])
+    U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[-2+1,-2]-cell_S_x_us[-2,-2]+cell_S_y_vnn[-2,-2+1]-cell_S_y_vs[-2,-2])
     cell_cent_pnn[-2,-2]=(cell_vol*U_s-(cell_cent_pn[-2-1,-2]+cell_cent_pn[-2,-2-1]))/(-2)
     cell_cent_pn[-2,-2]=cell_cent_pnn[-2,-2]
     
@@ -70,20 +75,16 @@ def p_BC_looper(cell_cent_pn,var_dict):
     dt=var_dict['dt']
     cell_cent_pn[0,:Nx2+2]=cell_cent_pn[-2,:Nx2+2]     
     cell_cent_pn[-1,:Nx2+2]=cell_cent_pn[1,:Nx2+2]         
-    cell_cent_pn[:Nx1+2,0]=cell_cent_pn[:Nx1+2,-2]
-    cell_cent_pn[:Nx1+2,-1]=cell_cent_pn[:Nx1+2,1]
+    cell_cent_pn[:Nx1+2,0]=cell_cent_pn[:Nx1+2,1]
+    cell_cent_pn[:Nx1+2,-1]=cell_cent_pn[:Nx1+2,-2]
     return cell_cent_pn
    
 def unn_looper(cell_S_x_us, cell_cent_pnn, cell_S_x_unn, cell_cent_rho,var_dict):
     Nx2=var_dict['Nx2']
     Nx1=var_dict['Nx1']
     dt=var_dict['dt']
-    cell_S_x_unn[1 : Nx2 + 1, 1 : Nx1 + 1] = cell_S_x_us[
-        1 : Nx2 + 1, 1 : Nx1 + 1
-    ] - (1 / cell_cent_rho[1 : Nx2 + 1, 1 : Nx1 + 1]) * (dt) * (
-        cell_cent_pnn[1 : Nx2 + 1, 1 : Nx1 + 1]
-        - cell_cent_pnn[0 : Nx2 + 1 - 1, 1 : Nx1 + 1]
-    )
+    h=var_dict['h']
+    cell_S_x_unn[1 : Nx1 + 1, 1 : Nx2 + 1] = cell_S_x_us[1 : Nx1 + 1, 1 : Nx2 + 1] - (1 / (1*cell_cent_rho[1 : Nx1 + 1, 1 : Nx2 + 1])) * (dt) * (cell_cent_pnn[1 : Nx1 + 1, 1 : Nx2 + 1]- cell_cent_pnn[0 : Nx1 + 1 - 1, 1 : Nx2 + 1])
     return cell_S_x_unn
 def unn_BC_looper(cell_S_x_unn,var_dict):
     Nx2=var_dict['Nx2']
