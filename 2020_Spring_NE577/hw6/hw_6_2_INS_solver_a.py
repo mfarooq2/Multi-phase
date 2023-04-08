@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Feb 21 11:34:56 2020
-
-@author: Wazowskai
-"""
-
+import itertools
 import numpy as np
 import math
 #import matplotlib
@@ -74,10 +68,7 @@ def lvlset_init(x,y):
     return ls_dpl(x,y)
 
 def M_sw(a,b):
-    if abs(a)<abs(b):
-        return a
-    else:
-        return b
+    return a if abs(a)<abs(b) else b
 #level-set functions
 
 def D_x_p_n(i,j):
@@ -124,7 +115,7 @@ def L_phi_n(i,j):
             return cell_cent_phin[i-1,j]+0.5*M_sw(D_x_p_n(i-1,j), D_x_m_n(i-1,j))
     def phi_yh_n(i,j):
         if 0.5*(cell_S_y_vnn[i,j+1]+cell_S_y_vnn[i,j])>0:
-            return cell_cent_phin[i,j]+0.5*M_sw(D_y_p_n(i.j), D_y_m_n(i,j))
+            return cell_cent_phin[i,j]+0.5*M_sw(D_y_p_n(i,j), D_y_m_n(i,j))
         elif 0.5*(cell_S_y_vnn[i,j+1]+cell_S_y_vnn[i,j])<0:
             return cell_cent_phin[i,j+1]+0.5*M_sw(D_y_p_n(i,j+1), D_y_m_n(i,j+1))
     def phi_hy_n(i,j):
@@ -150,7 +141,7 @@ def L_phi_s(i,j):
             return cell_cent_phis[i-1,j]+0.5*M_sw(D_x_p_s(i-1,j), D_x_m_s(i-1,j))
     def phi_yh_s(i,j):
         if 0.5*(cell_S_y_vnn[i,j+1]+cell_S_y_vnn[i,j])>0:
-            return cell_cent_phis[i,j]+0.5*M_sw(D_y_p_s(i.j), D_y_m_s(i,j))
+            return cell_cent_phis[i,j]+0.5*M_sw(D_y_p_s(i,j), D_y_m_s(i,j))
         elif 0.5*(cell_S_y_vnn[i,j+1]+cell_S_y_vnn[i,j])<0:
             return cell_cent_phis[i,j+1]+0.5*M_sw(D_y_p_s(i,j+1), D_y_m_s(i,j+1))
     def phi_hy_s(i,j):
@@ -392,9 +383,8 @@ def us_looper_2(cell_S_x_un, cell_cent_mu, cell_cent_rho, cell_S_x_us):
         for i in range(int(Nx1/2), Nx1+1):
             cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*((nu)*Dif_x_n(i,j)+(-gradP)/rho)
 def us_looper_3(cell_S_x_un, cell_cent_mu, cell_cent_rho, cell_S_x_us):
-    for j in range(int(Nx2/2), Nx2+1):
-        for i in range(1, int(Nx1/2)):
-            cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*((nu)*Dif_x_n(i,j)+(-gradP)/rho)
+    for j, i in itertools.product(range(int(Nx2/2), Nx2+1), range(1, int(Nx1/2))):
+        cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*((nu)*Dif_x_n(i,j)+(-gradP)/rho)
 def us_looper_4(cell_S_x_un, cell_cent_mu, cell_cent_rho, cell_S_x_us):
     for j in range(int(Nx2/2), Nx2+1):
         for i in range(int(Nx1/2), Nx1+1):
@@ -446,25 +436,24 @@ def p_looper_1( cell_S_x_us, cell_S_y_vs, cell_cent_pn, cell_cent_pnn, lock):
 def p_looper_2( cell_S_x_us, cell_S_y_vs, cell_cent_pn, cell_cent_pnn, lock):
     global epstot
     epstot2=0.0
-    for i in range(int(Nx1/2), Nx1):
-        for j in range(1,int(Nx2/2)):
-            U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[i+1,j]-cell_S_x_us[i,j]+cell_S_y_vs[i,j+1]-cell_S_y_vs[i,j])
-            cell_cent_pnn[i,j]=(cell_vol*U_s-(cell_cent_pn[i+1,j]+cell_cent_pn[i-1,j]+cell_cent_pn[i,j+1]+cell_cent_pn[i,j-1]))/(-4)
-            epstot2+=(cell_cent_pnn[i,j]-cell_cent_pn[i,j])**2
-            cell_cent_pn[i,j]=cell_cent_pnn[i,j] 
-    
+    for i, j in itertools.product(range(int(Nx1/2), Nx1), range(1,int(Nx2/2))):
+        U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[i+1,j]-cell_S_x_us[i,j]+cell_S_y_vs[i,j+1]-cell_S_y_vs[i,j])
+        cell_cent_pnn[i,j]=(cell_vol*U_s-(cell_cent_pn[i+1,j]+cell_cent_pn[i-1,j]+cell_cent_pn[i,j+1]+cell_cent_pn[i,j-1]))/(-4)
+        epstot2+=(cell_cent_pnn[i,j]-cell_cent_pn[i,j])**2
+        cell_cent_pn[i,j]=cell_cent_pnn[i,j] 
+
     for j in range(2, int(Nx2/2)):    
         U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-1,j]-cell_S_x_us[-2,j]+cell_S_y_vs[-2,j+1]-cell_S_y_vs[-2,j])
         cell_cent_pnn[-2,j]=(cell_vol*U_s-(cell_cent_pn[-3,j]+cell_cent_pn[-2,j+1]+cell_cent_pn[-2,j-1]))/(-3)
         epstot2+=(cell_cent_pnn[-2,j]-cell_cent_pn[-2,j])**2
         cell_cent_pn[-2,j]=cell_cent_pnn[-2,j]
-            
+
     U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_unn[-2+1,1]-cell_S_x_us[-2,1]+cell_S_y_vs[-2,2]-cell_S_y_vnn[-2,1])
     cell_cent_pnn[-2,1]=(cell_vol*U_s-(cell_cent_pn[-2-1,1]+cell_cent_pn[-2,2]))/(-2)
     epstot2+=(cell_cent_pnn[-2,1]-cell_cent_pn[-2,1])**2
     cell_cent_pn[-2,1]=cell_cent_pnn[-2,1]
-    
-    
+
+
     lock.acquire()
     epstot+=epstot2
     lock.release()
@@ -546,15 +535,13 @@ def p_looper_master():
     p_BC_looper(cell_cent_pn)
    
 def unn_looper_1(cell_S_x_us, cell_cent_pnn, cell_S_x_unn, cell_cent_rho):
-    for j in range(1, int(Nx2/2)):
-        for i in range(1, int(Nx1/2)):
-            cell_S_x_unn[i,j]=cell_S_x_us[i,j]-(1/cell_cent_rho[i,j])*(dt)*(cell_cent_pnn[i,j]-cell_cent_pnn[i-1,j])
+    for j, i in itertools.product(range(1, int(Nx2/2)), range(1, int(Nx1/2))):
+        cell_S_x_unn[i,j]=cell_S_x_us[i,j]-(1/cell_cent_rho[i,j])*(dt)*(cell_cent_pnn[i,j]-cell_cent_pnn[i-1,j])
 
     
 def unn_looper_2(cell_S_x_us, cell_cent_pnn, cell_S_x_unn, cell_cent_rho):
-    for j in range(1, int(Nx2/2)):
-        for i in range(int(Nx1/2), Nx1+1):
-            cell_S_x_unn[i,j]=cell_S_x_us[i,j]-(1/cell_cent_rho[i,j])*(dt)*(cell_cent_pnn[i,j]-cell_cent_pnn[i-1,j])
+    for j, i in itertools.product(range(1, int(Nx2/2)), range(int(Nx1/2), Nx1+1)):
+        cell_S_x_unn[i,j]=cell_S_x_us[i,j]-(1/cell_cent_rho[i,j])*(dt)*(cell_cent_pnn[i,j]-cell_cent_pnn[i-1,j])
 def unn_looper_3(cell_S_x_us, cell_cent_pnn, cell_S_x_unn, cell_cent_rho):
     for j in range(int(Nx2/2), Nx2+1):
         for i in range(1, int(Nx1/2)):
@@ -755,15 +742,14 @@ def phi_dnn_looper_3(cell_cent_phi_dn, cell_cent_phi_ds, cell_cent_phi_dnn):
             cell_cent_phi_dnn[i,j]=cell_cent_phi_dn[i,j]+0.5*dtau*(L_phi_d_n(i,j)+L_phi_d_s(i,j))
 
 def phi_dnn_looper_4(cell_cent_phi_dn, cell_cent_phi_ds, cell_cent_phi_dnn):
-    for j in range(int(Nx2/2), Nx2+1):
-        for i in range(int(Nx1/2), Nx1+1):    
-            cell_cent_phi_dnn[i,j]=cell_cent_phi_dn[i,j]+0.5*dtau*(L_phi_d_n(i,j)+L_phi_d_s(i,j))
+    for j, i in itertools.product(range(int(Nx2/2), Nx2+1), range(int(Nx1/2), Nx1+1)):
+        cell_cent_phi_dnn[i,j]=cell_cent_phi_dn[i,j]+0.5*dtau*(L_phi_d_n(i,j)+L_phi_d_s(i,j))
 
 def phi_dnn_BC_looper(cell_cent_phi_dnn):
-    for j in range(0, Nx2+2):    
+    for j in range(Nx2+2):    
         cell_cent_phi_dnn[0,j]=cell_cent_phi_dnn[-2,j]
         cell_cent_phi_dnn[-1,j]=cell_cent_phi_dnn[1,j]
-    for i in range(0, Nx1+2):   
+    for i in range(Nx1+2):   
         cell_cent_phi_dnn[i,0]=cell_cent_phi_dn[i,-2]
         cell_cent_phi_dnn[i,-1]=cell_cent_phi_dnn[i,1]
     
