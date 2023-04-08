@@ -11,7 +11,14 @@ def us_looper(cell_S_x_un, cell_cent_mu, cell_cent_rho, cell_S_x_us,var_dict):
     
     cell_S_x_us[1:Nx1+1,1:Nx2+1]=cell_S_x_un[1:Nx1+1,1:Nx2+1]+dt*((nu)*Dif_x_n(cell_S_x_un,var_dict))+(-gradP)/rho
     return cell_S_x_us
-        
+def us_BC_looper(cell_S_x_us,var_dict):
+    Nx2=var_dict['Nx2']
+    Nx1=var_dict['Nx1']
+    cell_S_x_us[0,:Nx2+2]=cell_S_x_us[-2,:Nx2+2]     
+    cell_S_x_us[-1,:Nx2+2]=cell_S_x_us[1,:Nx2+2]
+    cell_S_x_us[:Nx1+2,0]=cell_S_x_us[:Nx1+2,1]
+    cell_S_x_us[:Nx1+2,-1]=cell_S_x_us[:Nx1+2,-2]
+    return cell_S_x_us       
     
 def p_looper( cell_S_x_us, cell_S_y_vs,cell_S_x_unn,cell_S_y_vnn, cell_cent_pn, cell_cent_pnn,var_dict):
     Nx1=var_dict['Nx1']
@@ -62,9 +69,9 @@ def p_BC_looper(cell_cent_pn,var_dict):
     Nx1=var_dict['Nx1']
     dt=var_dict['dt']
     cell_cent_pn[0,:Nx2+2]=cell_cent_pn[-2,:Nx2+2]     
-    cell_cent_pn[-1,:Nx2+2]=cell_cent_pn[1,Nx2+2]         
-    cell_cent_pn[:Nx1+2,0]=cell_cent_pn[:Nx1+2,1]
-    cell_cent_pn[:Nx1+2,-1]=cell_cent_pn[:Nx1+2,-2]
+    cell_cent_pn[-1,:Nx2+2]=cell_cent_pn[1,:Nx2+2]         
+    cell_cent_pn[:Nx1+2,0]=cell_cent_pn[:Nx1+2,-2]
+    cell_cent_pn[:Nx1+2,-1]=cell_cent_pn[:Nx1+2,1]
     return cell_cent_pn
    
 def unn_looper(cell_S_x_us, cell_cent_pnn, cell_S_x_unn, cell_cent_rho,var_dict):
@@ -104,14 +111,12 @@ def phis_BC_looper(cell_cent_phis,var_dict):
     cell_cent_phis[:Nx1+2,0]=cell_cent_phis[:Nx1+2,-2]
     cell_cent_phis[:Nx1+2,-1]=cell_cent_phis[:Nx1+2,1]
     return cell_cent_phis
-    
-
         
-def phinn_looper(cell_cent_phinn,cell_cent_phis,cell_cent_phi_ds,cell_cent_phin,cell_S_x_un,cell_S_y_vn,var_dict):
+def phinn_looper(cell_cent_phinn,cell_cent_phis,cell_cent_phi_ds,cell_cent_phin,cell_S_x_un,cell_S_x_us,cell_S_y_vn,var_dict):
     Nx1=var_dict['Nx1']
     Nx2=var_dict['Nx2']
     dt=var_dict['dt']
-    cell_cent_phinn[1:Nx1+1,1: Nx2+1]=cell_cent_phin[1:Nx1+1,1: Nx2+1]+0.5*dt*(L_phi_n(cell_cent_phis,cell_cent_phin,cell_S_x_un,cell_S_y_vn,var_dict)+L_phi_s(cell_cent_phis,cell_cent_phi_ds,var_dict))[1:Nx1+1,1: Nx2+1]
+    cell_cent_phinn[1:Nx1+1,1: Nx2+1]=cell_cent_phin[1:Nx1+1,1: Nx2+1]+0.5*dt*(L_phi_n(cell_cent_phis,cell_cent_phin,cell_S_x_un,cell_S_y_vn,var_dict)+L_phi_s(cell_cent_phis,cell_cent_phin,cell_S_x_us,cell_S_y_vn,var_dict))[1:Nx1+1,1: Nx2+1]
     return cell_cent_phinn
 def phinn_BC_looper(cell_cent_phinn,var_dict):
     Nx1=var_dict['Nx1']
@@ -144,7 +149,7 @@ def phi_dnn_looper(cell_cent_phi_dn, cell_cent_phin, cell_cent_phi_dnn,cell_cent
     Nx1=var_dict['Nx1']                        
     Nx2=var_dict['Nx2']
     dtau=var_dict['dtau']
-    cell_cent_phi_dnn[1:Nx1+1,1:Nx2+1]=cell_cent_phi_dn[1:Nx1+1,1:Nx2+1]+0.5*dtau*(L_phi_d_n(cell_cent_phin,cell_cent_phi_dn,var_dict)[1:Nx1+1,1:Nx2+1]+L_phi_ds(cell_cent_phi_ds,cell_cent_phis,var_dict)[1:Nx1+1,1:Nx2+1])
+    cell_cent_phi_dnn[1:Nx1+1,1:Nx2+1]=cell_cent_phi_dn[1:Nx1+1,1:Nx2+1]+0.5*dtau*(L_phi_d_n(cell_cent_phin,cell_cent_phi_dn,var_dict)+L_phi_ds(cell_cent_phi_ds,cell_cent_phis,var_dict))
     return cell_cent_phi_dnn
 def phi_dnn_BC_looper(cell_cent_phi_dnn,var_dict):  
         Nx1=var_dict['Nx1']                        

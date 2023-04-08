@@ -41,7 +41,8 @@ h=var_dict['h']=Lx1/Nx1
 #redistancing pseudo-time count
 tau=0.0
 #redistancing pseudo-time step
-dtau=0.5*h
+dtau= var_dict['dtau']= 0.5*h
+
 #smoothing range
 M=var_dict['M']=3.0
 #uave
@@ -99,24 +100,28 @@ ref_S_u=np.zeros([Nx2+2])
 L_sq=np.array([1.0,1.0])
 
 #corner coor initialization
-cell_cor_x1, cell_cor_y1 = np.meshgrid((Lx1/Nx1)*np.linspace(-1, Nx1+1, Nx1+3), (Lx1/Nx1)*np.linspace(-1, Nx2+1, Nx2+3),indexing='ij')
+cell_cor_x, cell_cor_y = np.meshgrid((Lx1/Nx1)*np.linspace(-1, Nx1+1, Nx1+3), (Lx1/Nx1)*np.linspace(-1, Nx2+1, Nx2+3),indexing='ij')
         
 #cell cent coor storage
-        
+
 
 cell_cent_x[0:Nx1+2,0:Nx2+2]=0.25*(cell_cor_x[0:Nx1+2,0:Nx2+2]+cell_cor_x[0+1:Nx1+2+1,0:Nx2+2]+cell_cor_x[0:Nx1+2,0+1:Nx2+2+1]+cell_cor_x[0+1:Nx1+2+1,0+1:Nx2+2+1])
+
 cell_cent_y[0:Nx1+2,0:Nx2+2]=0.25*(cell_cor_y[0:Nx1+2,0:Nx2+2] + cell_cor_y[0+1:Nx1+2+1,0:Nx2+2] + cell_cor_y[0:Nx1+2,0+1:Nx2+2+1]+cell_cor_y[0+1:Nx1+2+1,0+1:Nx2+2+1])
 #lvlset init
 cell_cent_phin[0:Nx1+2,0:Nx2+2]=lvlset_init(cell_cent_x[0:Nx1+2,0:Nx2+2], cell_cent_y[0:Nx1+2,0:Nx2+2],var_dict)
-cell_cent_rho[0:Nx1+2,0:Nx2+2]=rho_distr(cell_cent_phin[0:Nx1+2,0:Nx2+2],var_dict)
-cell_cent_mu[0:Nx1+2,0:Nx2+2]=mu_distr(cell_cent_phin[0:Nx1+2,0:Nx2+2],var_dict)
+
+
+
+
 cell_S_x_coor_x[0:Nx1+2,0:Nx2+2]=(cell_cor_x[0:Nx1+2,0:Nx2+2]+cell_cor_x[0:Nx1+2,0+1:Nx2+2+1])/2
 cell_S_x_coor_y[0:Nx1+2,0:Nx2+2]=(cell_cor_y[0:Nx1+2,0:Nx2+2]+cell_cor_y[0:Nx1+2,0+1:Nx2+2+1])/2
 cell_S_y_coor_x[0:Nx1+2,0:Nx2+2]=(cell_cor_x[0:Nx1+2,0:Nx2+2]+cell_cor_x[0+1:Nx1+2+1,0:Nx2+2])/2
 cell_S_y_coor_y[0:Nx1+2,0:Nx2+2]=(cell_cor_y[0:Nx1+2,0:Nx2+2]+cell_cor_y[0+1:Nx1+2+1,0:Nx2+2])/2
-#initial conditions
-cell_S_x_un[0:Nx1+2,0:Nx2+2]=ref_vel_prof(cell_cent_y[0:Nx1+2,0:Nx2+2])
-#cell_S_y_un[i,j]=0.00
+cell_cent_rho[0:Nx1+2,0:Nx2+2]=rho_distr(cell_cent_phin[0:Nx1+2,0:Nx2+2],var_dict)
+cell_cent_mu[0:Nx1+2,0:Nx2+2]=mu_distr(cell_cent_phin[0:Nx1+2,0:Nx2+2],var_dict)
+
+
 
 cell_S_x[0:Nx1+2,0:Nx2+2]=abs(cell_cor_y[0:Nx1+2,0:Nx2+2]-cell_cor_y[0:Nx1+2,0+1:Nx2+2+1])
 cell_S_y[0:Nx1+2,0:Nx2+2]=abs(cell_cor_x[0:Nx1+2,0:Nx2+2]-cell_cor_x[0+1:Nx1+2+1,0:Nx2+2])
@@ -124,53 +129,17 @@ cell_S_y[0:Nx1+2,0:Nx2+2]=abs(cell_cor_x[0:Nx1+2,0:Nx2+2]-cell_cor_x[0+1:Nx1+2+1
 cell_S_x_nx[0:Nx1+2,0:Nx2+2]=(cell_cor_y[0:Nx1+2,0+1:Nx2+2+1]-cell_cor_y[0:Nx1+2,0:Nx2+2])/cell_S_x[0:Nx1+2,0:Nx2+2]
 cell_S_x_ny[0:Nx1+2,0:Nx2+2]=(cell_cor_x[0:Nx1+2,0+1:Nx2+2+1]-cell_cor_x[0:Nx1+2,0:Nx2+2])/cell_S_x[0:Nx1+2,0:Nx2+2]
 cell_S_y_nx[0:Nx1+2,0:Nx2+2]=(cell_cor_y[0+1:Nx1+2+1,0:Nx2+2]-cell_cor_y[0:Nx1+2,0:Nx2+2])/cell_S_y[0:Nx1+2,0:Nx2+2]
-cell_S_y_ny[0:Nx1+2,0:Nx2+2]=(cell_cor_x[0+1:Nx1+2+1,0:Nx2+2]-cell_cor_x[0:Nx1+2,0:Nx2+2])/cell_S_y[0:Nx1+2,0:Nx2+2]        
+cell_S_y_ny[0:Nx1+2,0:Nx2+2]=(cell_cor_x[0+1:Nx1+2+1,0:Nx2+2]-cell_cor_x[0:Nx1+2,0:Nx2+2])/cell_S_y[0:Nx1+2,0:Nx2+2]
 
-bub=plt.Circle((0.01, 0.005), r_dpl, color='grey', fill=False)
-fig, ax=plt.subplots()
-plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_phin[1:Nx1+1, 1:Nx2+1], 20, cmap='coolwarm')
-plt.colorbar()
-ax.add_artist(bub)
-plt.xlabel('$x_1$ (m)')
-plt.ylabel('$x_2$ (m)')
-plt.title('domain initial level-set, '+str(Nx2), fontsize=9)
-plt.gca().set_aspect('equal')
-plt.savefig('hw6_2_'+str(Nx2)+'_init_ref_ls_init.png')
-plt.show() 
 
-plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_rho[1:Nx1+1, 1:Nx2+1], 20, cmap='cool')
-plt.colorbar()
-ax.add_artist(bub)
-plt.xlabel('$x_1$ (m)')
-plt.ylabel('$x_2$ (m)')
-plt.title('domain initial rho $(kg/m^3)$, '+str(Nx2), fontsize=9)
-plt.gca().set_aspect('equal')
-plt.savefig('hw6_2_'+str(Nx2)+'_init_ref_rho_init.png')
-plt.show() 
+#initial conditions
+cell_S_x_un[0:Nx1+2,0:Nx2+2]=ref_vel_prof(cell_cent_y[0:Nx1+2,0:Nx2+2])
 
-plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_mu[1:Nx1+1, 1:Nx2+1], 20, cmap='bone')
-plt.colorbar()
-ax.add_artist(bub)
-plt.xlabel('$x_1$ (m)')
-plt.ylabel('$x_2$ (m)')
-plt.title('domain initial viscosity $(Pa s)$, '+str(Nx2), fontsize=9)
-plt.gca().set_aspect('equal')
-plt.savefig('hw6_2_'+str(Nx2)+'_init_ref_mu_init.png')
-plt.show() 
 
-L_sq_r=L_sq[1]/L_sq[0]
-for i in range(1, Nx2+1):
-    ref_S_u[i]=ref_vel_prof(cell_S_x_coor_y[0,i])  
 
-while n_iter<=1300:
-    L_sq[0]=L_sq[1]
-    
-    epstot=100.0
-    while epstot>1e-3:
-        epstot=0.0
-        
-    cell_cent_phin=cell_cent_phinn
-        
-    #level-set redistancing
-    
-    sq_sum_error=0
+cell_cent_phis=phis_BC_looper(phis_looper(cell_cent_phis,cell_cent_phin,cell_S_x_un,cell_S_y_vn,var_dict),var_dict)
+cell_cent_phinn=phinn_BC_looper(phinn_looper(cell_cent_phinn,cell_cent_phis,cell_cent_phi_ds,cell_cent_phin,cell_S_x_un,cell_S_x_us,cell_S_y_vn,var_dict),var_dict)
+cell_cent_phin=cell_cent_phinn
+cell_cent_phi_dnn=phi_dnn_looper(cell_cent_phi_dn, cell_cent_phin, cell_cent_phi_dnn,cell_cent_phi_ds,cell_cent_phis,var_dict)
+cell_cent_pn=p_looper( cell_S_x_us, cell_S_y_vs,cell_S_x_unn,cell_S_y_vnn, cell_cent_pn, cell_cent_pnn,var_dict)
+cell_cent_pn=p_BC_looper(cell_cent_pn,var_dict)

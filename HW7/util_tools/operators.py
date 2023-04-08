@@ -61,7 +61,7 @@ def L_phi_n(cell_cent_phis,cell_cent_phin,cell_S_x_un,cell_S_y_vn,var_dict):
     D_x_p_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1+1:Nx1+1+1,1:Nx2+1]-cell_cent_phin[1:Nx1+1,1:Nx2+1]
     D_x_m_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1:Nx1+1,1:Nx2+1]-cell_cent_phin[1-1:Nx1+1-1,1:Nx2+1]
     D_y_p_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1:Nx1+1,1+1:Nx2+1+1]-cell_cent_phin[1:Nx1+1,1:Nx2+1]
-    D_y_m_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1:Nx1+1,1:Nx2+1]-cell_cent_phin[1-1:Nx1+1-1,1:Nx2+1]
+    D_y_m_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1:Nx1+1,1:Nx2+1]-cell_cent_phin[1:Nx1+1,1-1:Nx2+1-1]
     D_x_p_s[Nx1+1,1:Nx2+1] = cell_cent_phis[2,1:Nx2+1]-cell_cent_phis[Nx1+1,1:Nx2+1] 
     D_x_p_s[1:Nx1+1,1:Nx2+1]= cell_cent_phis[1+1:Nx1+1+1,1:Nx2+1]-cell_cent_phis[1:Nx1+1,1:Nx2+1]                     
     D_x_m_s[1:Nx1+1,1:Nx2+1]= cell_cent_phis[1:Nx1+1,1:Nx2+1]-cell_cent_phis[1-1:Nx1+1-1,1:Nx2+1]                      
@@ -74,53 +74,42 @@ def L_phi_n(cell_cent_phis,cell_cent_phin,cell_S_x_un,cell_S_y_vn,var_dict):
 
     return -1*(cell_S_x_un)*(phi_xh_n-phi_hx_n)/h
 
-def L_phi_s(cell_cent_phis,cell_cent_phi_ds,var_dict):
+
+
+def L_phi_s(cell_cent_phis,cell_cent_phin,cell_S_x_us,cell_S_y_vn,var_dict):
     Nx1=var_dict['Nx1']
     Nx2=var_dict['Nx2']
     h=var_dict['h']
-    M=var_dict['M']
-    sign_phi=np.zeros_like(cell_cent_phis)
-    sign_phi_Mh=np.zeros_like(cell_cent_phis)
-    Dd_x_p_s=np.zeros_like(cell_cent_phi_ds)
-    Dd_x_m_s=np.zeros_like(cell_cent_phi_ds)
-    Dd_y_p_s=np.zeros_like(cell_cent_phi_ds)
-    Dd_y_m_s=np.zeros_like(cell_cent_phi_ds)
-    DDd_pm_x_s=np.zeros_like(cell_cent_phi_ds)
-    DDd_pm_y_s=np.zeros_like(cell_cent_phi_ds)
-    
-    Dtda_x_p_s=np.zeros_like(Dd_x_p_s)
-    Dtda_x_m_s=np.zeros_like(Dd_y_m_s)
-    Dtda_y_p_s=np.zeros_like(Dd_y_p_s)
-    Dtda_y_m_s=np.zeros_like(Dd_y_m_s)
-    Dtda_x_s=np.zeros_like(Dd_x_m_s)
-    Dtda_y_s=np.zeros_like(Dd_y_p_s)
-    
-    sign_phi[1:Nx1+1,1:Nx2+1]=np.where(cell_cent_phis[1:Nx1+1,1:Nx2+1]>0,1,np.where(cell_cent_phis[1:Nx1+1,1:Nx2+1]<0,-1,0))
-    sign_phi_Mh[1:Nx1+1,1:Nx2+1]=np.where(cell_cent_phis[1:Nx1+1,1:Nx2+1]>(M*h),1,np.where(cell_cent_phis[1:Nx1+1,1:Nx2+1]<(-1*M*h),-1,cell_cent_phis[1:Nx1+1,1:Nx2+1]/(M*h)-np.sin((np.pi*cell_cent_phis[1:Nx1+1,1:Nx2+1])/(M*h))/np.pi))
-    
-    
-    Dd_x_p_s[1:Nx1+1,1:Nx2+1]= cell_cent_phi_ds[1+1:Nx1+1+1,1:Nx2+1]-cell_cent_phi_ds[1:Nx1+1,1:Nx2+1]
-    Dd_x_m_s[1:Nx1+1,1:Nx2+1]= cell_cent_phi_ds[1:Nx1+1,1:Nx2+1]-cell_cent_phi_ds[1-1:Nx1+1-1,1:Nx2+1]
-    Dd_y_p_s[1:Nx1+1,1:Nx2+1]= cell_cent_phi_ds[1:Nx1+1,1+1:Nx2+1+1]-cell_cent_phi_ds[1:Nx1+1,1:Nx2+1]
-    Dd_y_m_s[1:Nx1+1,1:Nx2+1]= cell_cent_phi_ds[1:Nx1+1,1:Nx2+1]-cell_cent_phi_ds[1:Nx1+1,1-1:Nx2+1-1]
-    DDd_pm_x_s[Nx1+1,1:Nx2+1] =  cell_cent_phi_ds[2,1:Nx2+1]-2*cell_cent_phi_ds[Nx1+1,1:Nx2+1]+cell_cent_phi_ds[Nx1+1-1,1:Nx2+1]    
-    DDd_pm_x_s[0,1:Nx2+1]= cell_cent_phi_ds[0+1,1:Nx2+1]-2*cell_cent_phi_ds[0,1:Nx2+1]+cell_cent_phi_ds[-3,1:Nx2+1]
-    DDd_pm_x_s[1:Nx1+1,1:Nx2+1]= cell_cent_phi_ds[1+1:Nx1+1+1,1:Nx2+1]-2*cell_cent_phi_ds[1:Nx1+1,1:Nx2+1]+cell_cent_phi_ds[1-1:Nx1+1-1,1:Nx2+1]
-    DDd_pm_y_s[1:Nx1+1,Nx2+1] =  cell_cent_phi_ds[1:Nx1+1,2]-2*cell_cent_phi_ds[1:Nx1+1,1]+cell_cent_phi_ds[1:Nx1+1,0]
-    DDd_pm_y_s[1:Nx1+1,0]= cell_cent_phi_ds[1:Nx1+1,-1]-2*cell_cent_phi_ds[1:Nx1+1,-2]+cell_cent_phi_ds[1:Nx1+1,-3]
-    DDd_pm_y_s[1:Nx1+1,1:Nx2+1]= cell_cent_phi_ds[1:Nx1+1,1+1:Nx2+1+1]-2*cell_cent_phi_ds[1:Nx1+1,1:Nx2+1]+cell_cent_phi_ds[1:Nx1+1,1-1:Nx2+1-1]
-    Dtda_x_p_s[1:Nx1+1,1:Nx2+1] = Dd_x_p_s[1:Nx1+1,1:Nx2+1]-0.5*np.where((abs(DDd_pm_x_s[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_x_s[1+1:Nx1+1+1,1:Nx2+1])),DDd_pm_x_s[1:Nx1+1,1:Nx2+1],DDd_pm_x_s[1+1:Nx1+1+1,1:Nx2+1])
+    D_x_p_n=np.zeros_like(cell_cent_phin)
+    D_x_m_n=np.zeros_like(cell_cent_phin)
+    D_y_p_n=np.zeros_like(cell_cent_phin)
+    D_y_m_n=np.zeros_like(cell_cent_phin)
+    D_x_p_s=np.zeros_like(cell_cent_phis)
+    D_x_m_s=np.zeros_like(cell_cent_phis)
+    D_y_p_s=np.zeros_like(cell_cent_phis)
+    D_y_m_s=np.zeros_like(cell_cent_phis)
+    D_x_p_s=np.zeros_like(cell_cent_phis)
+    phi_xh_s=np.zeros_like(cell_S_x_us)
+    phi_hx_s=np.zeros_like(cell_S_x_us)
 
-    Dtda_x_m_s[1:Nx1+1,1:Nx2+1] = Dd_y_m_s[1:Nx1+1,1:Nx2+1]+0.5*np.where((abs(DDd_pm_x_s[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_x_s[1-1:Nx1+1-1,1:Nx2+1])),DDd_pm_x_s[1:Nx1+1,1:Nx2+1],DDd_pm_x_s[1-1:Nx1+1-1,1:Nx2+1])
+    D_x_p_n[Nx1+1,1:Nx2+1] = cell_cent_phin[2,1:Nx2+1]-cell_cent_phin[Nx1+1,1:Nx2+1]
+    D_x_p_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1+1:Nx1+1+1,1:Nx2+1]-cell_cent_phin[1:Nx1+1,1:Nx2+1]
+    D_x_m_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1:Nx1+1,1:Nx2+1]-cell_cent_phin[1-1:Nx1+1-1,1:Nx2+1]
+    D_y_p_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1:Nx1+1,1+1:Nx2+1+1]-cell_cent_phin[1:Nx1+1,1:Nx2+1]
+    D_y_m_n[1:Nx1+1,1:Nx2+1]= cell_cent_phin[1:Nx1+1,1:Nx2+1]-cell_cent_phin[1:Nx1+1,1-1:Nx2+1-1]
+    D_x_p_s[Nx1+1,1:Nx2+1] = cell_cent_phis[2,1:Nx2+1]-cell_cent_phis[Nx1+1,1:Nx2+1] 
+    D_x_p_s[1:Nx1+1,1:Nx2+1]= cell_cent_phis[1+1:Nx1+1+1,1:Nx2+1]-cell_cent_phis[1:Nx1+1,1:Nx2+1]                     
+    D_x_m_s[1:Nx1+1,1:Nx2+1]= cell_cent_phis[1:Nx1+1,1:Nx2+1]-cell_cent_phis[1-1:Nx1+1-1,1:Nx2+1]                      
+    D_y_p_s[1:Nx1+1,1:Nx2+1]= cell_cent_phis[1:Nx1+1,1+1:Nx2+1+1]-cell_cent_phis[1:Nx1+1,1:Nx2+1]                   
+    D_y_m_s[1:Nx1+1,1:Nx2+1]= cell_cent_phis[1:Nx1+1,1:Nx2+1]-cell_cent_phis[1-1:Nx1+1-1,1:Nx2+1]
 
-    Dtda_y_p_s[1:Nx1+1,1:Nx2+1]= Dd_y_p_s[1:Nx1+1,1:Nx2+1]-0.5*np.where((abs(DDd_pm_y_s[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_y_s[1+1:Nx1+1+1,1:Nx2+1])),DDd_pm_y_s[1:Nx1+1,1:Nx2+1],DDd_pm_y_s[1+1:Nx1+1+1,1:Nx2+1])
+    phi_xh_s[1:Nx1+1,1:Nx2+1]=np.where(0.5*(cell_S_x_us[1+1:Nx1+1+1,1:Nx2+1]+cell_S_x_us[1:Nx1+1,1:Nx2+1])>0,cell_cent_phis[1:Nx1+1,1:Nx2+1] + 0.5*np.where((abs(D_x_p_s[1:Nx1+1,1:Nx2+1])<abs(D_x_m_s[1:Nx1+1,1:Nx2+1])),D_x_p_s[1:Nx1+1,1:Nx2+1],D_x_m_s[1:Nx1+1,1:Nx2+1]),cell_cent_phis[1+1:Nx1+1+1,1:Nx2+1] - 0.5*np.where((abs(D_x_p_s[1+1:Nx1+1+1,1:Nx2+1])<abs(D_x_m_s[1+1:Nx1+1+1,1:Nx2+1])),D_x_m_s[1+1:Nx1+1+1,1:Nx2+1],D_x_m_s[1+1:Nx1+1+1,1:Nx2+1]))
+    phi_hx_s[1:Nx1+1,1:Nx2+1]=np.where(0.5*(cell_S_x_us[1:Nx1+1,1:Nx2+1]+cell_S_x_us[1-1:Nx1+1-1,1:Nx2+1])>0,cell_cent_phis[1:Nx1+1,1:Nx2+1] + 0.5*np.where((abs(D_x_p_s[1-1:Nx1+1-1,1:Nx2+1])<abs(D_x_m_s[1-1:Nx1+1-1,1:Nx2+1])),D_x_p_s[1-1:Nx1+1-1,1:Nx2+1],D_x_m_s[1-1:Nx1+1-1,1:Nx2+1]),cell_cent_phis[1:Nx1+1,1:Nx2+1] - 0.5*np.where((abs(D_x_p_s[1:Nx1+1,1:Nx2+1])<abs(D_x_m_s[1:Nx1+1,1:Nx2+1])),D_x_p_s[1:Nx1+1,1:Nx2+1],D_x_m_s[1:Nx1+1,1:Nx2+1]))
 
-    Dtda_y_m_s[1:Nx1+1,1:Nx2+1]= Dd_y_m_s[1:Nx1+1,1:Nx2+1]+0.5*np.where((abs(DDd_pm_y_s[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_y_s[1-1:Nx1+1-1,1:Nx2+1])),DDd_pm_y_s[1:Nx1+1,1:Nx2+1],DDd_pm_y_s[1-1:Nx1+1-1,1:Nx2+1])
 
-    Dtda_x_s[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]), Dd_x_p_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]), Dd_x_m_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_x_p_s+Dtda_x_m_s),0.5*(Dtda_x_p_s[1:Nx1+1,1:Nx2+1]+Dtda_x_m_s[1:Nx1+1,1:Nx2+1]))  ))  
-    Dtda_y_s[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]), Dd_y_p_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]), Dd_y_m_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_y_p_s+Dtda_y_m_s),0.5*(Dtda_y_p_s[1:Nx1+1,1:Nx2+1]+Dtda_y_m_s[1:Nx1+1,1:Nx2+1]))  ))  
-    
-    return sign_phi_Mh[1:Nx1+1,1:Nx2+1]*(1-((Dtda_x_s[1:Nx1+1,1:Nx2+1]/h)**2+(Dtda_y_s[1:Nx1+1,1:Nx2+1]/h)**2)**0.5)
+    return -1*(cell_S_x_us)*(phi_xh_s-phi_hx_s)/h
+
+
 def L_phi_d_n(cell_cent_phin,cell_cent_phi_dn,var_dict):
     Nx1=var_dict['Nx1']
     Nx2=var_dict['Nx2']
@@ -155,7 +144,7 @@ def L_phi_d_n(cell_cent_phin,cell_cent_phi_dn,var_dict):
     DDd_pm_x_n[Nx1+1,1:Nx2+1] =  cell_cent_phi_dn[2,1:Nx2+1]-2*cell_cent_phi_dn[Nx1+1,1:Nx2+1]+cell_cent_phi_dn[Nx1+1-1,1:Nx2+1]
     DDd_pm_x_n[0,1:Nx2+1]= cell_cent_phi_dn[0+1,1:Nx2+1]-2*cell_cent_phi_dn[0,1:Nx2+1]+cell_cent_phi_dn[-3,1:Nx2+1]
     DDd_pm_x_n[1:Nx1+1,1:Nx2+1]= cell_cent_phi_dn[1+1:Nx1+1+1,1:Nx2+1]-2*cell_cent_phi_dn[1:Nx1+1,1:Nx2+1]+cell_cent_phi_dn[1-1:Nx1+1-1,1:Nx2+1]
-    DDd_pm_y_n[Nx1+1,Nx2+1] =  cell_cent_phi_dn[1:Nx1+1,2]-2*cell_cent_phi_dn[1:Nx1+1,1]+cell_cent_phi_dn[1:Nx1+1,0]
+    DDd_pm_y_n[1:Nx1+1,Nx2+1] =  cell_cent_phi_dn[1:Nx1+1,2]-2*cell_cent_phi_dn[1:Nx1+1,1]+cell_cent_phi_dn[1:Nx1+1,0]
     DDd_pm_y_n[1:Nx1+1,0]= cell_cent_phi_dn[1:Nx1+1,-1]-2*cell_cent_phi_dn[1:Nx1+1,-2]+cell_cent_phi_dn[1:Nx1+1,-3]
     DDd_pm_y_n[1:Nx1+1,1:Nx2+1]= cell_cent_phi_dn[1:Nx1+1,1+1:Nx2+1+1]-2*cell_cent_phi_dn[1:Nx1+1,1:Nx2+1]+cell_cent_phi_dn[1:Nx1+1,1-1:Nx2+1-1]
 
@@ -166,11 +155,11 @@ def L_phi_d_n(cell_cent_phin,cell_cent_phi_dn,var_dict):
 
     Dtda_y_p_n[1:Nx1+1,1:Nx2+1]= Dd_y_p_n[1:Nx1+1,1:Nx2+1]-0.5*np.where((abs(DDd_pm_y_n[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_y_n[1+1:Nx1+1+1,1:Nx2+1])),DDd_pm_y_n[1:Nx1+1,1:Nx2+1],DDd_pm_y_n[1+1:Nx1+1+1,1:Nx2+1])
 
-    Dtda_y_m_n[1:Nx1+1,1:Nx2+1]= Dd_y_m_n[1:Nx1+1,1:Nx2+1]+0.5*np.where((abs(DDd_pm_y_n[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_y_n[1-2:Nx1+1-2,1:Nx2+1])),DDd_pm_y_n[1:Nx1+1,1:Nx2+1],DDd_pm_y_n[1-2:Nx1+1-2,1:Nx2+1])
+    Dtda_y_m_n[1:Nx1+1,1:Nx2+1]= Dd_y_m_n[1:Nx1+1,1:Nx2+1]+0.5*np.where((abs(DDd_pm_y_n[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_y_n[1-1:Nx1+1-1,1:Nx2+1])),DDd_pm_y_n[1:Nx1+1,1:Nx2+1],DDd_pm_y_n[1-1:Nx1+1-1,1:Nx2+1])
 
 
-    Dtda_x_n[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_n[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]), Dd_x_p_n[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_n[1:Nx1+1,1:Nx2+1]), Dd_x_m_n[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_n[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_x_p_n+Dtda_x_m_n),0.5*(Dtda_x_p_n[1:Nx1+1,1:Nx2+1]+Dtda_x_m_n[1:Nx1+1,1:Nx2+1]))  ))  
-    Dtda_y_n[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_n[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]), Dd_y_p_n[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_n[1:Nx1+1,1:Nx2+1]), Dd_y_m_n[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_n[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_y_p_n+Dtda_y_m_n),0.5*(Dtda_y_p_n[1:Nx1+1,1:Nx2+1]+Dtda_y_m_n[1:Nx1+1,1:Nx2+1]))  ))  
+    Dtda_x_n[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_n[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]), Dd_x_p_n[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_n[1:Nx1+1,1:Nx2+1]), Dd_x_m_n[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_n[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_n[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_x_p_n[1:Nx1+1,1:Nx2+1]+Dtda_x_m_n[1:Nx1+1,1:Nx2+1]),0.5*(Dtda_x_p_n[1:Nx1+1,1:Nx2+1]+Dtda_x_m_n[1:Nx1+1,1:Nx2+1]))  ))  
+    Dtda_y_n[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_n[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]), Dd_y_p_n[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_n[1:Nx1+1,1:Nx2+1]), Dd_y_m_n[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_n[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_n[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_y_p_n[1:Nx1+1,1:Nx2+1]+Dtda_y_m_n[1:Nx1+1,1:Nx2+1]),0.5*(Dtda_y_p_n[1:Nx1+1,1:Nx2+1]+Dtda_y_m_n[1:Nx1+1,1:Nx2+1]))  ))  
     
     return sign_phi_Mh[1:Nx1+1,1:Nx2+1]*(1-((Dtda_x_n[1:Nx1+1,1:Nx2+1]/h)**2+(Dtda_y_n[1:Nx1+1,1:Nx2+1]/h)**2)**0.5)
 def L_phi_ds(cell_cent_phi_ds,cell_cent_phis,var_dict):
@@ -205,7 +194,7 @@ def L_phi_ds(cell_cent_phi_ds,cell_cent_phis,var_dict):
     DDd_pm_x_s[Nx1+1,1:Nx2+1] =  cell_cent_phi_ds[2,1:Nx2+1]-2*cell_cent_phi_ds[Nx1+1,1:Nx2+1]+cell_cent_phi_ds[Nx1+1-1,1:Nx2+1]    
     DDd_pm_x_s[0,1:Nx2+1]= cell_cent_phi_ds[0+1,1:Nx2+1]-2*cell_cent_phi_ds[0,1:Nx2+1]+cell_cent_phi_ds[-3,1:Nx2+1]
     DDd_pm_x_s[1:Nx1+1,1:Nx2+1]= cell_cent_phi_ds[1+1:Nx1+1+1,1:Nx2+1]-2*cell_cent_phi_ds[1:Nx1+1,1:Nx2+1]+cell_cent_phi_ds[1-1:Nx1+1-1,1:Nx2+1]
-    DDd_pm_y_s[Nx1+1,Nx2+1] =  cell_cent_phi_ds[1:Nx1+1,2]-2*cell_cent_phi_ds[1:Nx1+1,1]+cell_cent_phi_ds[1:Nx1+1,0]
+    DDd_pm_y_s[Nx1+1,1:Nx2+1] =  cell_cent_phi_ds[2,1:Nx2+1]-2*cell_cent_phi_ds[Nx1+1,1:Nx2+1]+cell_cent_phi_ds[Nx1+1-1,1:Nx2+1]
     DDd_pm_y_s[1:Nx1+1,0]= cell_cent_phi_ds[1:Nx1+1,-1]-2*cell_cent_phi_ds[1:Nx1+1,-2]+cell_cent_phi_ds[1:Nx1+1,-3]
     DDd_pm_y_s[1:Nx1+1,1:Nx2+1]= cell_cent_phi_ds[1:Nx1+1,1+1:Nx2+1+1]-2*cell_cent_phi_ds[1:Nx1+1,1:Nx2+1]+cell_cent_phi_ds[1:Nx1+1,1-1:Nx2+1-1]
     Dtda_x_p_s[1:Nx1+1,1:Nx2+1] = Dd_x_p_s[1:Nx1+1,1:Nx2+1]-0.5*np.where((abs(DDd_pm_x_s[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_x_s[1+1:Nx1+1+1,1:Nx2+1])),DDd_pm_x_s[1:Nx1+1,1:Nx2+1],DDd_pm_x_s[1+1:Nx1+1+1,1:Nx2+1])
@@ -214,10 +203,10 @@ def L_phi_ds(cell_cent_phi_ds,cell_cent_phis,var_dict):
 
     Dtda_y_p_s[1:Nx1+1,1:Nx2+1]= Dd_y_p_s[1:Nx1+1,1:Nx2+1]-0.5*np.where((abs(DDd_pm_y_s[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_y_s[1+1:Nx1+1+1,1:Nx2+1])),DDd_pm_y_s[1:Nx1+1,1:Nx2+1],DDd_pm_y_s[1+1:Nx1+1+1,1:Nx2+1])
 
-    Dtda_y_m_s[1:Nx1+1,1:Nx2+1]= Dd_y_m_s[1:Nx1+1,1:Nx2+1]+0.5*np.where((abs(DDd_pm_y_s[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_y_s[1-2:Nx1+1-2,1:Nx2+1])),DDd_pm_y_s[1:Nx1+1,1:Nx2+1],DDd_pm_y_s[1-2:Nx1+1-2,1:Nx2+1])
+    Dtda_y_m_s[1:Nx1+1,1:Nx2+1]= Dd_y_m_s[1:Nx1+1,1:Nx2+1]+0.5*np.where((abs(DDd_pm_y_s[1:Nx1+1,1:Nx2+1])<abs(DDd_pm_y_s[1-1:Nx1+1-1,1:Nx2+1])),DDd_pm_y_s[1:Nx1+1,1:Nx2+1],DDd_pm_y_s[1-1:Nx1+1-1,1:Nx2+1])
 
-    Dtda_x_s[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]), Dd_x_p_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]), Dd_x_m_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_x_p_s+Dtda_x_m_s),0.5*(Dtda_x_p_s[1:Nx1+1,1:Nx2+1]+Dtda_x_m_s[1:Nx1+1,1:Nx2+1]))  ))  
-    Dtda_y_s[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]), Dd_y_p_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]), Dd_y_m_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_y_p_s+Dtda_y_m_s),0.5*(Dtda_y_p_s[1:Nx1+1,1:Nx2+1]+Dtda_y_m_s[1:Nx1+1,1:Nx2+1]))  ))  
+    Dtda_x_s[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]), Dd_x_p_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]), Dd_x_m_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_p_s[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_x_m_s[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_x_p_s[1:Nx1+1,1:Nx2+1]+Dtda_x_m_s[1:Nx1+1,1:Nx2+1]),0.5*(Dtda_x_p_s[1:Nx1+1,1:Nx2+1]+Dtda_x_m_s[1:Nx1+1,1:Nx2+1]))  ))  
+    Dtda_y_s[1:Nx1+1,1:Nx2+1] = np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]<-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]), Dd_y_p_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]<0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]>-1*sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]), Dd_y_m_s[1:Nx1+1,1:Nx2+1],np.where((sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_p_s[1:Nx1+1,1:Nx2+1]>0) & (sign_phi[1:Nx1+1,1:Nx2+1]*Dd_y_m_s[1:Nx1+1,1:Nx2+1]>0), 0.5*(Dtda_y_p_s[1:Nx1+1,1:Nx2+1]+Dtda_y_m_s[1:Nx1+1,1:Nx2+1]),0.5*(Dtda_y_p_s[1:Nx1+1,1:Nx2+1]+Dtda_y_m_s[1:Nx1+1,1:Nx2+1]))  ))  
     
     return sign_phi_Mh[1:Nx1+1,1:Nx2+1]*(1-((Dtda_x_s[1:Nx1+1,1:Nx2+1]/h)**2+(Dtda_y_s[1:Nx1+1,1:Nx2+1]/h)**2)**0.5)
 def f_st_x(cell_cent_phin,var_dict):
