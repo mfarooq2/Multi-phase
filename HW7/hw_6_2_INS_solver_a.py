@@ -9,15 +9,14 @@ import threading as thd
 from util_tools.operators import *
 from util_tools.update_funcs import *
 #problem constants
-var_dict = {}
-var_dict['nu']=1e-6
-var_dict['mu']=1e-3
-var_dict['rho']=1e+3
-var_dict['st_coef']=0.06
-#real timestep
-var_dict['dt']=0.0001
-var_dict['gradP']=-2.4
-
+var_dict = {
+    'nu': 1e-06,
+    'mu': 0.001,
+    'rho': 1000.0,
+    'st_coef': 0.06,
+    'dt': 0.0001,
+    'gradP': -2.4,
+}
 n_iter=0
 global epstot
 '''
@@ -48,7 +47,7 @@ M=var_dict['M']=3.0
 #uave
 u1_ave=var_dict['u1_ave']=0.02
 
-    
+
 epstot=100.0
 p_iter=0
 #cell centroid coor
@@ -101,7 +100,7 @@ L_sq=np.array([1.0,1.0])
 
 #corner coor initialization
 cell_cor_x, cell_cor_y = np.meshgrid((Lx1/Nx1)*np.linspace(-1, Nx1+1, Nx1+3), (Lx1/Nx1)*np.linspace(-1, Nx2+1, Nx2+3),indexing='ij')
-        
+
 #cell cent coor storage
 
 

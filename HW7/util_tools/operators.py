@@ -269,4 +269,4 @@ def rho_distr(cell_cent_phin,var_dict):
 def mu_distr(cell_cent_phin,var_dict):
     mu_in=1e-3
     mu_out=1e-4
-    return mu_in**f(cell_cent_phin,var_dict)+mu_out*(1-f(cell_cent_phin,var_dict))
+    return mu_in*f(cell_cent_phin,var_dict)+mu_out*(1-f(cell_cent_phin,var_dict))

@@ -1,6 +1,5 @@
 from util_tools.operators import *
 
-
 def us_looper(cell_S_x_un, cell_cent_mu, cell_cent_rho, cell_S_x_us,var_dict):
     Nx1=var_dict['Nx1']
     Nx2=var_dict['Nx2']
@@ -9,7 +8,7 @@ def us_looper(cell_S_x_un, cell_cent_mu, cell_cent_rho, cell_S_x_us,var_dict):
     rho=var_dict['rho']
     dt=var_dict['dt']
     
-    cell_S_x_us[1:Nx1+1,1:Nx2+1]=cell_S_x_un[1:Nx1+1,1:Nx2+1]+dt*((nu)*Dif_x_n(cell_S_x_un,var_dict))+(-gradP)/rho
+    cell_S_x_us[1:Nx1+1,1:Nx2+1]=cell_S_x_un[1:Nx1+1,1:Nx2+1]+dt*((nu)*Dif_x_n(cell_S_x_un,var_dict)+(-gradP)/rho)
     return cell_S_x_us
 def us_BC_looper(cell_S_x_us,var_dict):
     Nx2=var_dict['Nx2']
