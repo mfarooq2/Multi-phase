@@ -60,7 +60,7 @@ cell_cent_pnn=np.zeros([Nx1+2,Nx2+2])
 
 cell_cent_phin=np.zeros([Nx1+2,Nx2+2])
 cell_cent_phis=np.zeros([Nx1+2,Nx2+2])
-cell_cent_phinn=np.zeros([Nx1+2,Nx2+2])
+phinn=np.zeros([Nx1+2,Nx2+2])
 
 cell_cent_phi_dn=np.zeros([Nx1+2,Nx2+2])
 cell_cent_phi_ds=np.zeros([Nx1+2,Nx2+2])

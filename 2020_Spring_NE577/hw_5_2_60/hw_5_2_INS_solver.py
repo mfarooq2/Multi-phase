@@ -248,15 +248,11 @@ while n_iter<=13000:
     epstot=100.0
     while epstot>1e-3:
         epstot=0.0
-
-        
         for j in range(2, Nx2):
             U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[2,j]-cell_S_x_unn[1,j]+cell_S_y_vs[1,j+1]-cell_S_y_vs[1,j])
             cell_cent_pnn[1,j]=(cell_vol*U_s-(cell_cent_pn[2,j]+cell_cent_pn[1,j+1]+cell_cent_pn[1,j-1]))/(-3)
             epstot+=(cell_cent_pnn[1,j]-cell_cent_pn[1,j])**2
             cell_cent_pn[1,j]=cell_cent_pnn[1,j]
-            
-            
         for i in range(2, Nx1):
             for j in range(1,Nx2+1):
                 U_s=(rho/(dt*(Lx1/Nx1)))*(cell_S_x_us[i+1,j]-cell_S_x_us[i,j]+cell_S_y_vs[i,j+1]-cell_S_y_vs[i,j])
@@ -298,16 +294,16 @@ while n_iter<=13000:
             cell_cent_pn[i,0]=cell_cent_pn[i,1]
             cell_cent_pn[i,-1]=cell_cent_pn[i,-2]
     
-        if p_iter%500==0:
-            plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_pnn[1:Nx1+1, 1:Nx2+1], 20, cmap='jet')
-            plt.colorbar()
-            plt.xlabel('$x_1$ (m)')
-            plt.ylabel('$x_2$ (m)')
-            plt.title('domain $p^{n+1}$ contour ($Pa$)')
-            plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_p_contour.png')
-            plt.gca().set_aspect('equal')
-            plt.show() 
-            print('eps_tot= {:5.4e}'.format(epstot))
+        # if p_iter%500==0:
+        #     plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_pnn[1:Nx1+1, 1:Nx2+1], 20, cmap='jet')
+        #     plt.colorbar()
+        #     plt.xlabel('$x_1$ (m)')
+        #     plt.ylabel('$x_2$ (m)')
+        #     plt.title('domain $p^{n+1}$ contour ($Pa$)')
+        #     plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_p_contour.png')
+        #     plt.gca().set_aspect('equal')
+        #     plt.show() 
+        #     print('eps_tot= {:5.4e}'.format(epstot))
         p_iter+=1
     #print('eps_tot= {:5.4e}'.format(epstot))    
     #corrector step:

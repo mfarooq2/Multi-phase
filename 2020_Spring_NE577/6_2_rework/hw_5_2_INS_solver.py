@@ -483,8 +483,8 @@ while n_iter<=1300:
     #predictor step:
     for j in range(1, Nx2+1):
         for i in range(1, Nx1+1):
-            #cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*(-Adv_x_n(i,j)+nu*Dif_x_n(i,j))
-            cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*(-Adv_x_n(i,j)+nu*Dif_x_n(i,j)+(f_st_x(i,j)-gradP/rho))
+            cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*(-Adv_x_n(i,j)+nu*Dif_x_n(i,j)-(gradP/rho))
+            #cell_S_x_us[i,j]=cell_S_x_un[i,j]+dt*(-Adv_x_n(i,j)+nu*Dif_x_n(i,j)+(f_st_x(i,j)-gradP/rho))
     epstot=100.0
     while epstot>1e-4:
         epstot=0.0
@@ -538,25 +538,25 @@ while n_iter<=1300:
             cell_cent_pn[i,0]=cell_cent_pn[i,1]
             cell_cent_pn[i,-1]=cell_cent_pn[i,-2]
     
-        if p_iter%500==0:
-            plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_pnn[1:Nx1+1, 1:Nx2+1], 20, cmap='jet')
-            plt.colorbar()
-            plt.xlabel('$x_1$ (m)')
-            plt.ylabel('$x_2$ (m)')
-            plt.title('domain $p^{n+1}$ contour ($Pa$)')
-            plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_p_contour.png')
-            plt.gca().set_aspect('equal')
-            plt.show() 
-            print('eps_tot= {:5.4e}'.format(epstot))
+        # if p_iter%500==0:
+        #     plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_pnn[1:Nx1+1, 1:Nx2+1], 20, cmap='jet')
+        #     plt.colorbar()
+        #     plt.xlabel('$x_1$ (m)')
+        #     plt.ylabel('$x_2$ (m)')
+        #     plt.title('domain $p^{n+1}$ contour ($Pa$)')
+        #     plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_p_contour.png')
+        #     plt.gca().set_aspect('equal')
+        #     plt.show() 
+        #     print('eps_tot= {:5.4e}'.format(epstot))
             
-            plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_phin[1:Nx1+1, 1:Nx2+1], 20, cmap='coolwarm')
-            plt.colorbar()
-            plt.xlabel('$x_1$ (m)')
-            plt.ylabel('$x_2$ (m)')
-            plt.title('domain level-set')
-            plt.gca().set_aspect('equal')
-            plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_ls.png')
-            plt.show()
+        #     plt.contourf(cell_cent_x[1:Nx1+1, 1:Nx2+1], cell_cent_y[1:Nx1+1, 1:Nx2+1], cell_cent_phin[1:Nx1+1, 1:Nx2+1], 20, cmap='coolwarm')
+        #     plt.colorbar()
+        #     plt.xlabel('$x_1$ (m)')
+        #     plt.ylabel('$x_2$ (m)')
+        #     plt.title('domain level-set')
+        #     plt.gca().set_aspect('equal')
+        #     plt.savefig('hw5_2_'+str(Nx2)+'_init_ref_ls.png')
+        #     plt.show()
         
         p_iter+=1
     #print('eps_tot= {:5.4e}'.format(epstot))    
