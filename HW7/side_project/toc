@@ -1,0 +1,386 @@
+"Introduction" 25
+    "1.1 Scripting versus Traditional Programming" 25
+        "1.1.1 Why Scripting is Useful in Computational Science" 26
+        "1.1.2 Classification of Programming Languages" 28
+        "1.1.3 Productive Pairs of Programming Languages" 29
+        "1.1.4 Gluing Existing Applications" 30
+        "1.1.5 Scripting Yields Shorter Code" 31
+        "1.1.6 Efficiency" 32
+        "1.1.7 Type-Specification (Declaration) of Variables" 33
+        "1.1.8 Flexible Function Interfaces" 35
+        "1.1.9 Interactive Computing" 36
+        "1.1.10 Creating Code at Run Time" 37
+        "1.1.11 Nested Heterogeneous Data Structures" 38
+        "1.1.12 GUI Programming" 40
+        "1.1.13 Mixed Language Programming" 41
+        "1.1.14 When to Choose a Dynamically Typed Language" 43
+        "1.1.15 Why Python?" 44
+        "1.1.16 Script or Program?" 45
+    "1.2 Preparations for Working with This Book" 46
+"Getting Started with Python Scripting" 50
+    "2.1 A Scientific Hello World Script" 50
+        "2.1.1 Executing Python Scripts" 51
+        "2.1.2 Dissection of the Scientific Hello World Script" 52
+    "2.2 Working with Files and Data" 55
+        "2.2.1 Problem Specification" 55
+        "2.2.2 The Complete Code" 56
+        "2.2.3 Dissection" 56
+        "2.2.4 Working with Files in Memory" 59
+        "2.2.5 Array Computing" 60
+        "2.2.6 Interactive Computing and Debugging" 62
+        "2.2.7 Efficiency Measurements" 65
+        "2.2.8 Exercises" 66
+    "2.3 Gluing Stand-Alone Applications" 69
+        "2.3.1 The Simulation Code" 70
+        "2.3.2 Using Gnuplot to Visualize Curves" 72
+        "2.3.3 Functionality of the Script" 73
+        "2.3.4 The Complete Code" 74
+        "2.3.5 Dissection" 76
+        "2.3.6 Exercises" 79
+    "2.4 Conducting Numerical Experiments" 81
+        "2.4.1 Wrapping a Loop Around Another Script" 82
+        "2.4.2 Generating an HTML Report" 83
+        "2.4.3 Making Animations" 84
+        "2.4.4 Varying Any Parameter" 86
+    "2.5 File Format Conversion" 89
+        "2.5.1 A Simple Read/Write Script" 89
+        "2.5.2 Storing Data in Dictionaries and Lists" 91
+        "2.5.3 Making a Module with Functions" 92
+        "2.5.4 Exercises" 94
+"Basic Python" 96
+    "3.1 Introductory Topics" 97
+        "3.1.1 Recommended Python Documentation" 97
+        "3.1.2 Control Statements" 98
+        "3.1.3 Running Applications" 99
+        "3.1.4 File Reading and Writing" 101
+        "3.1.5 Output Formatting" 103
+    "3.2 Variables of Different Types" 104
+        "3.2.1 Boolean Types" 105
+        "3.2.2 The None Variable" 105
+        "3.2.3 Numbers and Numerical Expressions" 106
+        "3.2.4 Lists and Tuples" 108
+        "3.2.5 Dictionaries" 114
+        "3.2.6 Splitting and Joining Text" 117
+        "3.2.7 String Operations" 118
+        "3.2.8 Text Processing" 120
+        "3.2.9 The Basics of a Python Class" 122
+        "3.2.10 Copy and Assignment" 124
+        "3.2.11 Determining a Variable’s Type" 128
+        "3.2.12 Exercises" 129
+    "3.3 Functions" 133
+        "3.3.1 Keyword Arguments" 134
+        "3.3.2 Doc Strings" 135
+        "3.3.3 Variable Number of Arguments" 136
+        "3.3.4 Call by Reference" 137
+        "3.3.5 Treatment of Input and Output Arguments" 139
+        "3.3.6 Function Objects" 140
+    "3.4 Working with Files and Directories" 141
+        "3.4.1 Listing Files in a Directory" 141
+        "3.4.2 Testing File Types" 142
+        "3.4.3 Removing Files and Directories" 143
+        "3.4.4 Copying and Renaming Files" 144
+        "3.4.5 Splitting Pathnames" 145
+        "3.4.6 Creating and Moving to Directories" 145
+        "3.4.7 Traversing Directory Trees" 146
+        "3.4.8 Exercises" 148
+"Numerical Computing in Python" 154
+    "4.1 A Quick NumPy Primer" 155
+        "4.1.1 Creating Arrays" 155
+        "4.1.2 Array Indexing" 159
+        "4.1.3 Loops over Arrays" 161
+        "4.1.4 Array Computations" 162
+        "4.1.5 More Array Functionality" 165
+        "4.1.6 Type Testing" 167
+        "4.1.7 Matrix Objects" 168
+        "4.1.8 Exercises" 169
+    "4.2 Vectorized Algorithms" 170
+        "4.2.1 From Scalar to Array in Function Arguments" 170
+        "4.2.2 Slicing" 172
+        "4.2.3 Exercises" 173
+    "4.3 More Advanced Array Computing" 174
+        "4.3.1 Random Numbers" 175
+        "4.3.2 Linear Algebra" 176
+        "4.3.3 Plotting" 177
+        "4.3.4 Example: Curve Fitting" 180
+        "4.3.5 Arrays on Structured Grids" 182
+        "4.3.6 File I/O with NumPy Arrays" 186
+        "4.3.7 Functionality in the Numpyutils Module" 189
+        "4.3.8 Exercises" 191
+    "4.4 Other Tools for Numerical Computations" 196
+        "4.4.1 The ScientificPython Package" 196
+        "4.4.2 The SciPy Package" 201
+        "4.4.3 The Python–Matlab Interface" 206
+        "4.4.4 Symbolic Computing in Python" 207
+        "4.4.5 Some Useful Python Modules" 209
+"Combining Python with Fortran, C, and C++" 212
+    "5.1 About Mixed Language Programming" 212
+        "5.1.1 Applications of Mixed Language Programming" 213
+        "5.1.2 Calling C from Python" 213
+        "5.1.3 Automatic Generation of Wrapper Code" 215
+    "5.2 Scientific Hello World Examples" 217
+        "5.2.1 Combining Python and Fortran" 218
+        "5.2.2 Combining Python and C" 224
+        "5.2.3 Combining Python and C++ Functions" 231
+        "5.2.4 Combining Python and C++ Classes" 233
+        "5.2.5 Exercises" 237
+    "5.3 A Simple Computational Steering Example" 238
+        "5.3.1 Modified Time Loop for Repeated Simulations" 239
+        "5.3.2 Creating a Python Interface" 240
+        "5.3.3 The Steering Python Script" 241
+        "5.3.4 Equipping the Steering Script with a GUI" 245
+    "5.4 Scripting Interfaces to Large Libraries" 246
+"Introduction to GUI Programming" 250
+    "6.1 Scientific Hello World GUI" 251
+        "6.1.1 Introductory Topics" 251
+        "6.1.2 The First Python/Tkinter Encounter" 253
+        "6.1.3 Binding Events" 256
+        "6.1.4 Changing the Layout" 257
+        "6.1.5 The Final Scientific Hello World GUI" 261
+        "6.1.6 An Alternative to Tkinter Variables" 263
+        "6.1.7 About the Pack Command" 264
+        "6.1.8 An Introduction to the Grid Geometry Manager" 266
+        "6.1.9 Implementing a GUI as a Class" 268
+        "6.1.10 A Simple Graphical Function Evaluator" 270
+        "6.1.11 Exercises" 271
+    "6.2 Adding GUIs to Scripts" 273
+        "6.2.1 A Simulation and Visualization Script with a GUI" 273
+        "6.2.2 Improving the Layout" 276
+        "6.2.3 Exercises" 279
+    "6.3 A List of Common Widget Operations" 280
+        "6.3.1 Frame" 282
+        "6.3.2 Label" 283
+        "6.3.3 Button" 285
+        "6.3.4 Text Entry" 285
+        "6.3.5 Balloon Help" 287
+        "6.3.6 Option Menu" 287
+        "6.3.7 Slider" 288
+        "6.3.8 Check Button" 288
+        "6.3.9 Making a Simple Megawidget" 289
+        "6.3.10 Menu Bar" 290
+        "6.3.11 List Data" 292
+        "6.3.12 Listbox" 292
+        "6.3.13 Radio Button" 295
+        "6.3.14 Combo Box" 297
+        "6.3.15 Message Box" 298
+        "6.3.16 User-Defined Dialogs" 299
+        "6.3.17 Color-Picker Dialogs" 301
+        "6.3.18 File Selection Dialogs" 301
+        "6.3.19 Toplevel" 303
+        "6.3.20 Some Other Types of Widgets" 304
+        "6.3.21 Adapting Widgets to the User’s Resize Actions" 305
+        "6.3.22 Customizing Fonts and Colors" 307
+        "6.3.23 Widget Overview" 309
+        "6.3.24 Exercises" 312
+"Web Interfaces and CGI Programming" 318
+    "7.1 Introductory CGI Scripts" 319
+        "7.1.1 Web Forms and CGI Scripts" 320
+        "7.1.2 Generating Forms in CGI Scripts" 322
+        "7.1.3 Debugging CGI Scripts" 324
+        "7.1.4 A General Shell Script Wrapper for CGI Scripts" 325
+        "7.1.5 Security Issues" 327
+    "7.2 Adding Web Interfaces to Scripts" 329
+        "7.2.1 A Class for Form Parameters" 329
+        "7.2.2 Calling Other Programs" 331
+        "7.2.3 Running Simulations" 332
+        "7.2.4 Getting a CGI Script to Work" 334
+        "7.2.5 Using Web Applications from Scripts" 336
+        "7.2.6 Exercises" 339
+"Advanced Python" 342
+    "8.1 Miscellaneous Topics" 342
+        "8.1.1 Parsing Command-Line Arguments" 342
+        "8.1.2 Platform-Dependent Operations" 345
+        "8.1.3 Run-Time Generation of Code" 346
+        "8.1.4 Exercises" 347
+    "8.2 Regular Expressions and Text Processing" 349
+        "8.2.1 Motivation" 349
+        "8.2.2 Special Characters" 352
+        "8.2.3 Regular Expressions for Real Numbers" 354
+        "8.2.4 Using Groups to Extract Parts of a Text" 357
+        "8.2.5 Extracting Interval Limits" 358
+        "8.2.6 Extracting Multiple Matches" 362
+        "8.2.7 Splitting Text" 367
+        "8.2.8 Pattern-Matching Modifiers" 368
+        "8.2.9 Substitution and Backreferences" 370
+        "8.2.10 Example: Swapping Arguments in Function Calls" 371
+        "8.2.11 A General Substitution Script" 374
+        "8.2.12 Debugging Regular Expressions" 376
+        "8.2.13 Exercises" 377
+    "8.3 Tools for Handling Data in Files" 385
+        "8.3.1 Writing and Reading Python Data Structures" 385
+        "8.3.2 Pickling Objects" 387
+        "8.3.3 Shelving Objects" 389
+        "8.3.4 Writing and Reading Zip and Tar Archive Files" 389
+        "8.3.5 Downloading Internet Files" 390
+        "8.3.6 Binary Input/Output" 391
+        "8.3.7 Exercises" 394
+    "8.4 A Database for NumPy Arrays" 394
+        "8.4.1 The Structure of the Database" 394
+        "8.4.2 Pickling" 397
+        "8.4.3 Formatted ASCII Storage" 398
+        "8.4.4 Shelving" 399
+        "8.4.5 Comparing the Various Techniques" 400
+    "8.5 Scripts Involving Local and Remote Hosts" 401
+        "8.5.1 Secure Shell Commands" 401
+        "8.5.2 Distributed Simulation and Visualization" 403
+        "8.5.3 Client/Server Programming" 405
+        "8.5.4 Threads" 405
+    "8.6 Classes" 407
+        "8.6.1 Class Programming" 407
+        "8.6.2 Checking the Class Type" 411
+        "8.6.3 Private Data" 412
+        "8.6.4 Static Data" 413
+        "8.6.5 Special Attributes" 413
+        "8.6.6 Special Methods" 414
+        "8.6.7 Multiple Inheritance" 415
+        "8.6.8 Using a Class as a C-like Structure" 416
+        "8.6.9 Attribute Access via String Names" 417
+        "8.6.10 New-Style Classes" 417
+        "8.6.11 Implementing Get/Set Functions via Properties" 418
+        "8.6.12 Subclassing Built-in Types" 419
+        "8.6.13 Building Class Interfaces at Run Time" 422
+        "8.6.14 Building Flexible Class Interfaces" 426
+        "8.6.15 Exercises" 432
+    "8.7 Scope of Variables" 436
+        "8.7.1 Global, Local, and Class Variables" 436
+        "8.7.2 Nested Functions" 438
+        "8.7.3 Dictionaries of Variables in Namespaces" 439
+    "8.8 Exceptions" 441
+        "8.8.1 Handling Exceptions" 442
+        "8.8.2 Raising Exceptions" 443
+    "8.9 Iterators" 444
+        "8.9.1 Constructing an Iterator" 444
+        "8.9.2 A Pointwise Grid Iterator" 446
+        "8.9.3 A Vectorized Grid Iterator" 450
+        "8.9.4 Generators" 451
+        "8.9.5 Some Aspects of Generic Programming" 455
+        "8.9.6 Exercises" 459
+    "8.10 Investigating Efficiency" 460
+        "8.10.1 CPU-Time Measurements" 460
+        "8.10.2 Profiling Python Scripts" 464
+        "8.10.3 Optimization of Python Code" 465
+        "8.10.4 Case Study on Numerical Efficiency" 468
+"Fortran Programming with NumPy Arrays" 473
+    "9.1 Problem Definition" 473
+    "9.2 Filling an Array in Fortran" 475
+        "9.2.1 The Fortran Subroutine" 476
+        "9.2.2 Building and Inspecting the Extension Module" 477
+    "9.3 Array Storage Issues" 479
+        "9.3.1 Generating an Erroneous Interface" 479
+        "9.3.2 Array Storage in C and Fortran" 481
+        "9.3.3 Input and Output Arrays as Function Arguments" 481
+        "9.3.4 F2PY Interface Files" 488
+        "9.3.5 Hiding Work Arrays" 492
+    "9.4 Increasing Callback Efficiency" 492
+        "9.4.1 Callbacks to Vectorized Python Functions" 493
+        "9.4.2 Avoiding Callbacks to Python" 495
+        "9.4.3 Compiled Inline Callback Functions" 496
+    "9.5 Summary" 500
+    "9.6 Exercises" 501
+"C and C++ Programming with NumPy Arrays" 505
+    "10.1 Automatic Interfacing of C/C++ Code" 506
+        "10.1.1 Using F2PY" 507
+        "10.1.2 Using Instant" 508
+        "10.1.3 Using Weave" 509
+    "10.2 C Programming with NumPy Arrays" 510
+        "10.2.1 The Basics of the NumPy C API" 511
+        "10.2.2 The Handwritten Extension Code" 513
+        "10.2.3 Sending Arguments from Python to C" 514
+        "10.2.4 Consistency Checks" 515
+        "10.2.5 Computing Array Values" 516
+        "10.2.6 Returning an Output Array" 518
+        "10.2.7 Convenient Macros" 519
+        "10.2.8 Module Initialization" 521
+        "10.2.9 Extension Module Template" 522
+        "10.2.10 Compiling, Linking, and Debugging the Module" 524
+        "10.2.11 Writing a Wrapper for a C Function" 525
+    "10.3 C++ Programming with NumPy Arrays" 528
+        "10.3.1 Wrapping a NumPy Array in a C++ Object" 528
+        "10.3.2 Using SCXX" 530
+        "10.3.3 NumPy–C++ Class Conversion" 533
+    "10.4 Comparison of the Implementations" 541
+        "10.4.1 Efficiency" 541
+        "10.4.2 Error Handling" 545
+        "10.4.3 Summary" 546
+    "10.5 Exercises" 547
+"More Advanced GUI Programming" 551
+    "11.1 Adding Plot Areas in GUIs" 551
+        "11.1.1 The BLT Graph Widget" 552
+        "11.1.2 Animation of Functions in BLT Graph Widgets" 558
+        "11.1.3 Other Tools for Making GUIs with Plots" 560
+        "11.1.4 Exercises" 561
+    "11.2 Event Bindings" 563
+        "11.2.1 Binding Events to Functions with Arguments" 564
+        "11.2.2 A Text Widget with Tailored Keyboard Bindings" 566
+        "11.2.3 A Fancy List Widget" 569
+    "11.3 Animated Graphics with Canvas Widgets" 572
+        "11.3.1 The First Canvas Encounter" 573
+        "11.3.2 Coordinate Systems" 574
+        "11.3.3 The Mathematical Model Class" 578
+        "11.3.4 The Planet Class" 579
+        "11.3.5 Drawing and Moving Planets" 581
+        "11.3.6 Dragging Planets to New Positions" 582
+        "11.3.7 Using Pmw’s Scrolled Canvas Widget" 586
+    "11.4 Simulation and Visualization Scripts" 588
+        "11.4.1 Restructuring the Script" 589
+        "11.4.2 Representing a Parameter by a Class" 591
+        "11.4.3 Improved Command-Line Script" 605
+        "11.4.4 Improved GUI Script" 606
+        "11.4.5 Improved CGI Script" 607
+        "11.4.6 Parameters with Physical Dimensions" 608
+        "11.4.7 Adding a Curve Plot Area" 610
+        "11.4.8 Automatic Generation of Scripts" 611
+        "11.4.9 Applications of the Tools" 612
+        "11.4.10 Allowing Physical Units in Input Files" 618
+        "11.4.11 Converting Input Files to GUIs" 623
+"Tools and Examples" 626
+    "12.1 Running Series of Computer Experiments" 626
+        "12.1.1 Multiple Values of Input Parameters" 627
+        "12.1.2 Implementation Details" 630
+        "12.1.3 Further Applications" 635
+    "12.2 Tools for Representing Functions" 639
+        "12.2.1 Functions Defined by String Formulas" 639
+        "12.2.2 A Unified Interface to Functions" 644
+        "12.2.3 Interactive Drawing of Functions" 650
+        "12.2.4 A Notebook for Selecting Functions" 654
+    "12.3 Solving Partial Differential Equations" 661
+        "12.3.1 Numerical Methods for 1D Wave Equations" 662
+        "12.3.2 Implementations of 1D Wave Equations" 665
+        "12.3.3 Classes for Solving 1D Wave Equations" 672
+        "12.3.4 A Problem Solving Environment" 678
+        "12.3.5 Numerical Methods for 2D Wave Equations" 684
+        "12.3.6 Implementations of 2D Wave Equations" 687
+        "12.3.7 Exercises" 695
+"Setting up the Required Software Environment" 698
+    "A.1 Installation on Unix Systems" 698
+        "A.1.1 A Suggested Directory Structure" 698
+        "A.1.2 Setting Some Environment Variables" 699
+        "A.1.3 Installing Tcl/Tk and Additional Modules" 700
+        "A.1.4 Installing Python" 701
+        "A.1.5 Installing Python Modules" 702
+        "A.1.6 Installing Gnuplot" 704
+        "A.1.7 Installing SWIG" 705
+        "A.1.8 Summary of Environment Variables" 705
+        "A.1.9 Testing the Installation of Scripting Utilities" 706
+    "A.2 Installation on Windows Systems" 706
+"Elements of Software Engineering" 710
+    "B.1 Building and Using Modules" 710
+        "B.1.1 Single-File Modules" 710
+        "B.1.2 Multi-File Modules" 714
+        "B.1.3 Debugging and Troubleshooting" 715
+    "B.2 Tools for Documenting Python Software" 717
+        "B.2.1 Doc Strings" 717
+        "B.2.2 Tools for Automatic Documentation" 719
+    "B.3 Coding Standards" 723
+        "B.3.1 Style Guide" 723
+        "B.3.2 Pythonic Programming" 727
+    "B.4 Verification of Scripts" 732
+        "B.4.1 Automating Regression Tests" 732
+        "B.4.2 Implementing a Tool for Regression Tests" 736
+        "B.4.3 Writing a Test Script" 740
+        "B.4.4 Verifying Output from Numerical Computations" 741
+        "B.4.5 Automatic Doc String Testing" 745
+        "B.4.6 Unit Testing" 747
+    "B.5 Version Control Management" 749
+        "B.5.1 Mercurial" 750
+        "B.5.2 Subversion" 753
+    "B.6 Exercises" 755

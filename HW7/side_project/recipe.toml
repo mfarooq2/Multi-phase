@@ -1,0 +1,43 @@
+[[heading]] 
+level = 1
+font.name = "CMBX12"
+font.size = 17.21500015258789
+font.size_tolerance = 0.1
+[[heading]]
+# Scripting versus Traditional Programming
+level = 2
+greedy = true
+font.name = "CMSSBX10"
+font.size = 14.345999717712402
+# font.size_tolerance = 1e-5
+# font.color = 0xffffff
+# font.superscript = false
+# font.italic = false
+# font.serif = true
+# font.monospace = false
+# font.bold = true
+# bbox.left = 178.60816955566406
+# bbox.top = 367.1878662109375
+# bbox.right = 451.9511413574219
+# bbox.bottom = 384.1304931640625
+# bbox.tolerance = 1e-5
+
+[[heading]]
+# Why Scripting is Useful in Computational Science
+level = 3
+greedy = true
+font.name = "CMSSBX10"
+font.size = 11.954999923706055
+# font.size_tolerance = 1e-5
+# font.color = 0xffffff
+# font.superscript = false
+# font.italic = false
+# font.serif = true
+# font.monospace = false
+# font.bold = true
+# bbox.left = 183.02923583984375
+# bbox.top = 150.6538848876953
+# bbox.right = 456.265869140625
+# bbox.bottom = 164.7727508544922
+# bbox.tolerance = 1e-5
+
