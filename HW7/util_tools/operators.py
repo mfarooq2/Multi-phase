@@ -50,13 +50,13 @@ def Dif_y_n(vn,var_dict):
     )
 
 def ref_vel_prof(x2):
-    return  -187.5*(x2**2)+0.01875
+    return  -187.5*((x2)**2)+0.01875
 #-1200*((x2-0.005)**2)+0.03
 
     
 
 def lvlset_init(x,y,var_dict):
-    return -1*(np.sqrt((x-0.02)**2+(y-0.01)**2)-var_dict['r_dpl'])
+    return -1*(np.sqrt((x)**2+(y)**2)-var_dict['r_dpl'])
 
 #level-set functions
 def L_phi(phi,u,v,var_dict):

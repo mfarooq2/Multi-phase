@@ -28,6 +28,19 @@ def projector( us, vs, pn,rho, pnn,var_dict):
 
     #Bottom Edge
     pnn[1:-1,0]=((h)*((rho[1:-1,0]/(dt)) * (us[2:-1,1] - us[1:-2,1] )) - (pn[2:,0] + pn[0:-2,0] + pn[1:-1,1]))/(-3)  #  pnn[1:-1,0]
+        #Corners
+
+    ##Top-Left
+    pnn[0,-1] = ((h) * ((rho[0,-1]/(dt))*(us[1,-2]-us[0,-2])) - (pn[1,-1]+ pn[0,-2])) / (-2)
+    ##Bottom-Left
+    pnn[0,0] = ((h) * ((rho[0,0]/(dt))*(us[1,1]-us[0,1])) - (pn[1,0]+ pn[0,1])) / (-2)
+
+
+
+    ##Top-Right
+    pnn[-1,-1] = ((h) * ((rho[-1,-1]/(dt))*(us[-1,-2]-us[-2,-2])) - (pn[-2,-1]+ pn[-1,-2])) / (-2)
+    ##Bottom-Right
+    pnn[-1,0] = ((h) * ((rho[-1,0]/(dt))*(us[-1,1]-us[-2,1])) - (pn[-2,0]+ pn[-1,1])) / (-2)
     
     
     
@@ -42,19 +55,7 @@ def projector( us, vs, pn,rho, pnn,var_dict):
     ##Inner Domain
     pnn[1:-1,1:-1] = ((h) * ((rho[1:-1,1:-1]/(dt))*(us[2:-1,2:-2]-us[1:-2,2:-2])) - (pn[2:,1:-1]+ pn[0:-2,1:-1]+ pn[1:-1,2:]+ pn[1:-1,0:-2])) / (-4)
 
-    #Corners
 
-    ##Top-Left
-    pnn[0,-1] = ((h) * ((rho[0,-1]/(dt))*(us[1,-2]-us[0,-2])) - (pn[1,-1]+ pn[0,-2])) / (-2)
-    ##Bottom-Left
-    pnn[0,0] = ((h) * ((rho[0,0]/(dt))*(us[1,1]-us[0,1])) - (pn[1,0]+ pn[0,1])) / (-2)
-
-
-
-    ##Top-Right
-    pnn[-1,-1] = ((h) * ((rho[-1,-1]/(dt))*(us[-1,-2]-us[-2,-2])) - (pn[-2,-1]+ pn[-1,-2])) / (-2)
-    ##Bottom-Right
-    pnn[-1,0] = ((h) * ((rho[-1,0]/(dt))*(us[-1,1]-us[-2,1])) - (pn[-2,0]+ pn[-1,1])) / (-2)
     return pnn
    
 def corrector(us, pnn, unn, rho,var_dict):
