@@ -56,7 +56,7 @@ def ref_vel_prof(x2):
     
 
 def lvlset_init(x,y,var_dict):
-    return -1*(np.sqrt((x)**2+(y)**2)-var_dict['r_dpl'])
+    return var_dict['r_dpl']-1*(np.sqrt((x)**2+(y)**2))
 
 #level-set functions
 def L_phi(phi,u,v,var_dict):
@@ -69,20 +69,21 @@ def L_phi(phi,u,v,var_dict):
     D_x_m=np.zeros_like(phi)
     phi_xh=np.zeros_like(phi)
     phi_hx=np.zeros_like(phi)
-    #D_x_p[Nx1+1,1:Nx2+1] = phi[2,1:Nx2+1]-phi[Nx1+1,1:Nx2+1]
-    #D_x_p[1:Nx1+1,1:Nx2+1]= phi[1+1:Nx1+1+1,1:Nx2+1]-phi[1:Nx1+1,1:Nx2+1]
-    D_x_p[1:-1,1:-1]= phi[2:,1:-1]-phi[1:-1,1:-1]
+    u=inter_polator(u,var_dict)
+    D_x_p[0,:] = phi[1,:]-phi[0,:]
+    D_x_p[-1,:] = phi[0,:]-phi[-1,:]
+    D_x_p[1:-1,:]= phi[2:,:]-phi[1:-1,:]
     
-    #D_x_m[Nx1+1,1:Nx2+1]= phi[2,1:Nx2+1]-phi[Nx1+1-1,1:Nx2+1]
-    # D_x_m[1:Nx1+1,1:Nx2+1]= phi[1:Nx1+1,1:Nx2+1]-phi[1-1:Nx1+1-1,1:Nx2+1]
-    D_x_m[1:-1,1:-1]= phi[1:-1,1:-1]-phi[0:-2,1:-1]
+    D_x_m[0,:]= phi[0,:]-phi[-1,:]
+    D_x_m[-1,:]= phi[-1,:]-phi[-2,:]
+    D_x_m[1:-1,:]= phi[1:-1,:]-phi[0:-2,:]
     #For i+1/2,j Eq 3.44
     for j in range(1, int(nx2-1)):
         for i in range(1, int(nx1-1)):
             if 0.5*(u[i+1,j]+u[i,j])>0:
                 phi_xh[i,j]= phi[i,j]+0.5*np.where(abs(D_x_p[i,j])< abs(D_x_m[i,j]),D_x_p[i,j], D_x_m[i,j])      
             elif 0.5*(u[i+1,j]+u[i,j])<0:
-                phi_xh[i+1,j]= u[i+1,j]-0.5*np.where(abs(D_x_p[i+1,j])< abs(D_x_m[i+1,j]),D_x_p[i+1,j], D_x_m[i+1,j])      
+                phi_xh[i+1,j]= phi[i+1,j]-0.5*np.where(abs(D_x_p[i+1,j])< abs(D_x_m[i+1,j]),D_x_p[i+1,j], D_x_m[i+1,j])      
                 
     for j in range(1, int(nx2-1)):
         for i in range(1, int(nx1-1)):                                                          #For i-1/2,j Eq 3.44
@@ -93,7 +94,9 @@ def L_phi(phi,u,v,var_dict):
     
     #phi_xh[1:Nx1+1,1:Nx2+1]=np.where(0.5*(u[1+1:Nx1+1+1,1:Nx2+1]+u[1:Nx1+1,1:Nx2+1])>0,phi[1:Nx1+1,1:Nx2+1] + 0.5*np.where((abs(D_x_p[1:Nx1+1,1:Nx2+1])<abs(D_x_m[1:Nx1+1,1:Nx2+1])),D_x_p[1:Nx1+1,1:Nx2+1],D_x_m[1:Nx1+1,1:Nx2+1]),phi[1+1:Nx1+1+1,1:Nx2+1] - 0.5*np.where((abs(D_x_p[1+1:Nx1+1+1,1:Nx2+1])<abs(D_x_m[1+1:Nx1+1+1,1:Nx2+1])),D_x_p[1+1:Nx1+1+1,1:Nx2+1],D_x_m[1+1:Nx1+1+1,1:Nx2+1]))
     #phi_hx[1:Nx1+1,1:Nx2+1]=np.where(0.5*(u[1:Nx1+1,1:Nx2+1]+u[1-1:Nx1+1-1,1:Nx2+1])>0,phi[1:Nx1+1,1:Nx2+1] + 0.5*np.where((abs(D_x_p[1-1:Nx1+1-1,1:Nx2+1])<abs(D_x_m[1-1:Nx1+1-1,1:Nx2+1])),D_x_p[1-1:Nx1+1-1,1:Nx2+1],D_x_m[1-1:Nx1+1-1,1:Nx2+1]),phi[1:Nx1+1,1:Nx2+1] - 0.5*np.where((abs(D_x_p[1:Nx1+1,1:Nx2+1])<abs(D_x_m[1:Nx1+1,1:Nx2+1])),D_x_p[1:Nx1+1,1:Nx2+1],D_x_m[1:Nx1+1,1:Nx2+1]))
-    return -1*(inter_polator(u,var_dict))*(phi_xh-phi_hx)/h
+    # phi_hx[0,:]=phi_hx[-2,:];phi_hx[-1,:]=phi_hx[1,:]
+    # phi_xh[0,:]=phi_xh[-2,:];phi_xh[-1,:]=phi_xh[1,:]
+    return -1*(u)*(phi_xh-phi_hx)/h
 
 def L_phi_d_n(cell_cent_phin,cell_cent_phi_dn,var_dict):
     Nx1=var_dict['Nx1']
@@ -244,7 +247,7 @@ def f_st_x(cell_cent_phin,var_dict):
 def f(phin,var_dict):
     h=var_dict['h']
     M=var_dict['M']
-    return np.where(phin<-1*M*h,0,np.where(phin>M*h,1,0.5*(1+(phin)/(M*h)+(np.sin((np.pi*phin)/(M*h)))/np.pi)))
+    return np.where(phin<-1*M*h,0,np.where(phin>M*h,1,0.5*(1+((phin)/(M*h))+(np.sin((np.pi*phin/M*h)))/np.pi)))
 def rho_distr(phin,var_dict):
     rho_in=1000
     rho_out=1
