@@ -393,6 +393,23 @@ def project(u, v, p, rho, dt, dx, dy, nx, ny):
 
     return u, v
 
+def plt_sol(u, v, phi, step, dt, xc, yc, Xc, Yc):
+    plt.clf()
+    # Interface
+    plt.contour(xc, yc, phi.T, levels=[0], colors='r')
+    # velocity quiver
+    skip = (slice(None,None,3), slice(None,None,3))
+    plt.quiver(Xc[skip], Yc[skip],
+               u[:-1,:][skip], v[:,:-1][skip], color='blue', scale=10)
+    plt.title(f"Step {step}, t={step*dt:.4f}")
+    plt.pause(0.01)
+
+def dump_sol(u, v, phi, filename):
+    np.savez(filename, u=u, v=v, phi=phi)
+
+def lam_gradp(mu, Lx2, u1_max):
+    return u1_max*2*mu*(-1)*(2/Lx2)**2
+
 # ---------------- MAIN SIMULATION LOOP ----------------
 for step in range(nsteps):
     # 1. Reinitialize level set
@@ -491,14 +508,7 @@ for step in range(nsteps):
 
     # Visualization every 10 steps
     if step % 10 == 0:
-        plt.clf()
-        # Interface
-        plt.contour(xc, yc, phi.T, levels=[0], colors='r')
-        # velocity quiver
-        skip = (slice(None,None,3), slice(None,None,3))
-        plt.quiver(Xc[skip], Yc[skip],
-                   uc[skip], vc[skip], color='blue', scale=10)
-        plt.title(f"Step {step}, t={step*dt:.4f}")
-        plt.pause(0.01)
+        plt_sol(u, v, phi, step, dt, xc, yc, Xc, Yc)
 
+dump_sol(u, v, phi, 'solution_data.npz')
 plt.show()
